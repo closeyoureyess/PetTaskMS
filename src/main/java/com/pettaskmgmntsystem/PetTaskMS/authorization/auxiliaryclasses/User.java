@@ -1,4 +1,4 @@
-package com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasees;
+package com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses;
 
 
 import jakarta.persistence.*;
@@ -15,11 +15,25 @@ public class User{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "password_user")
-    private String passwordKey;
+    @Column(name = "name_user")
+    private String name;
+
+    @Column(name = "surname_user")
+    private String surname;
 
     @Column(name = "email_user")
     private String email;
+
+    @Column(name = "password_user")
+    private String passwordKey;
+
+    public User(int id, String name, String surname, String email, String passwordKey) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.passwordKey = passwordKey;
+    }
 
     public User(int id, String passwordKey, String email){
         this.id = id;
@@ -40,6 +54,11 @@ public class User{
         this.passwordKey = passwordKey;
     }
 
+    public User(int id) {
+        this.id = id;
+    }
+
     public User(){
     }
+
 }

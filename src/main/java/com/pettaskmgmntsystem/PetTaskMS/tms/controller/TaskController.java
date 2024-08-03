@@ -26,6 +26,7 @@ public class TaskController {
     @GetMapping("/gen-info/{author}")
     public ResponseEntity<TaskDto> getTaskAuthor(@PathVariable("author") String author) {
         log.info("Получение задачи по автору, метод GET " + author);
+        return ResponseEntity.ok(null);
     }
 
     @GetMapping("/gen-info/{executor}")

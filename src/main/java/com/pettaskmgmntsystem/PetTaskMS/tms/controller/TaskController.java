@@ -35,6 +35,11 @@ public class TaskController {
         return ResponseEntity.ok(null);
     }
 
+    @PutMapping("/update-tasks")
+    public ResponseEntity<TaskDto> editTasks(@RequestBody TaskDto taskDto){
+        return ResponseEntity.ok(null);
+    }
+
     @DeleteMapping("/delete/{id}")
     ResponseEntity<List<TaskDto>> deleteCase(@PathVariable("id") Integer id) {
         log.info("Удаление задачи по id, метод DELETE" + id);

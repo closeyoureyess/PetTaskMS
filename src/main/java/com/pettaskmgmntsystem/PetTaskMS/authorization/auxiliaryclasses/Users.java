@@ -5,11 +5,13 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Entity
-@Table(name = "user_credentials")
+@Table(name = "users_credentials")
 @Getter
 @Setter
-public class User{
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +29,7 @@ public class User{
     @Column(name = "password_user")
     private String passwordKey;
 
-    public User(int id, String name, String surname, String email, String passwordKey) {
+    public Users(int id, String name, String surname, String email, String passwordKey) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -35,30 +37,44 @@ public class User{
         this.passwordKey = passwordKey;
     }
 
-    public User(int id, String passwordKey, String email){
+    public Users(int id, String passwordKey, String email) {
         this.id = id;
         this.passwordKey = passwordKey;
         this.email = email;
     }
 
-    public User(int id, String passwordKey){
+    public Users(int id, String passwordKey) {
         this.id = id;
         this.passwordKey = passwordKey;
     }
 
-    public User(String email, int... id){
+    public Users(String email, int... id) {
         this.email = email;
     }
 
-    public User(String passwordKey){
+    public Users(String passwordKey) {
         this.passwordKey = passwordKey;
     }
 
-    public User(int id) {
+    public Users(int id) {
         this.id = id;
     }
 
-    public User(){
+    public Users() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Users users = (Users) o;
+        return id == users.id && Objects.equals(name, users.name)
+                && Objects.equals(surname, users.surname) && Objects.equals(email, users.email) && Objects.equals(passwordKey, users.passwordKey);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, surname, email, passwordKey);
     }
 
 }

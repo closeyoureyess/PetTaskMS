@@ -1,27 +1,27 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.mapper;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.User;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.Users;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.UserDto;
 
 public class UserMapper {
 
-    public User convertDtoToUser(UserDto userDto) {
-        User userLocalObject = new User();
-        userLocalObject.setEmail(userDto.getEmail());
-        userLocalObject.setPasswordKey(userDto.getPasswordKey());
-        userLocalObject.setId(userDto.getId());
-        userLocalObject.setName(userDto.getName());
-        userLocalObject.setSurname(userDto.getSurname());
-        return userLocalObject;
+    public Users convertDtoToUser(UserDto userDto) {
+        Users usersLocalObject = new Users();
+        usersLocalObject.setEmail(userDto.getEmail());
+        usersLocalObject.setPasswordKey(userDto.getPasswordKey());
+        usersLocalObject.setId(userDto.getId());
+        usersLocalObject.setName(userDto.getName());
+        usersLocalObject.setSurname(userDto.getSurname());
+        return usersLocalObject;
     }
 
-    public UserDto convertDtoToUser(User user) {
+    public UserDto convertUserToDto(Users users) {
         UserDto userDtoLocalObject = new UserDto();
-        userDtoLocalObject.setEmail(user.getEmail());
-        userDtoLocalObject.setPasswordKey(user.getPasswordKey());
-        userDtoLocalObject.setId(user.getId());
-        userDtoLocalObject.setName(user.getName());
-        userDtoLocalObject.setSurname(user.getSurname());
+        userDtoLocalObject.setEmail(users.getEmail());
+        userDtoLocalObject.setPasswordKey(users.getPasswordKey());
+        userDtoLocalObject.setId(users.getId());
+        userDtoLocalObject.setName(users.getName());
+        userDtoLocalObject.setSurname(users.getSurname());
         return userDtoLocalObject;
     }
 }

@@ -11,7 +11,7 @@ import java.util.Objects;
 @Table(name = "users_credentials")
 @Getter
 @Setter
-public class Users {
+public class CustomUsers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,7 +29,10 @@ public class Users {
     @Column(name = "password_user")
     private String passwordKey;
 
-    public Users(int id, String name, String surname, String email, String passwordKey) {
+    @Column(name = "role_user")
+    private String role;
+
+    public CustomUsers(int id, String name, String surname, String email, String passwordKey) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -37,39 +40,39 @@ public class Users {
         this.passwordKey = passwordKey;
     }
 
-    public Users(int id, String passwordKey, String email) {
+    public CustomUsers(int id, String passwordKey, String email) {
         this.id = id;
         this.passwordKey = passwordKey;
         this.email = email;
     }
 
-    public Users(int id, String passwordKey) {
+    public CustomUsers(int id, String passwordKey) {
         this.id = id;
         this.passwordKey = passwordKey;
     }
 
-    public Users(String email, int... id) {
+    public CustomUsers(String email, int... id) {
         this.email = email;
     }
 
-    public Users(String passwordKey) {
+    public CustomUsers(String passwordKey) {
         this.passwordKey = passwordKey;
     }
 
-    public Users(int id) {
+    public CustomUsers(int id) {
         this.id = id;
     }
 
-    public Users() {
+    public CustomUsers() {
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Users users = (Users) o;
-        return id == users.id && Objects.equals(name, users.name)
-                && Objects.equals(surname, users.surname) && Objects.equals(email, users.email) && Objects.equals(passwordKey, users.passwordKey);
+        CustomUsers customUsers = (CustomUsers) o;
+        return id == customUsers.id && Objects.equals(name, customUsers.name)
+                && Objects.equals(surname, customUsers.surname) && Objects.equals(email, customUsers.email) && Objects.equals(passwordKey, customUsers.passwordKey);
     }
 
     @Override

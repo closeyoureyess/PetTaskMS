@@ -5,9 +5,11 @@ import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TaskDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.mapper.TaskMapper;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.TasksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Service
 public class TaskService {
 
     @Autowired

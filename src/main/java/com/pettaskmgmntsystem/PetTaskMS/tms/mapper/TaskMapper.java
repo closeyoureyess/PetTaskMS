@@ -1,20 +1,22 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.mapper;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
+/*import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;*/
 import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Tasks;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TaskDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class TaskMapper {
 
-    @Autowired
-    UserMapper userMapper;
+/*    @Autowired
+    UserMapper userMapper;*/
 
     public Tasks convertDtoToTasks(TaskDto taskDto) {
         Tasks taskLocalObject = new Tasks();
         taskLocalObject.setId(taskDto.getId());
-        taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(taskDto.getTaskExecutor()));
-        taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(taskDto.getTaskAuthor()));
+        /*taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(taskDto.getTaskExecutor()));
+        taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(taskDto.getTaskAuthor()));*/
         taskLocalObject.setTaskPriority(taskDto.getTaskPriority());
         taskLocalObject.setTaskStatus(taskDto.getTaskStatus());
         taskLocalObject.setDescription(taskDto.getDescription());
@@ -26,8 +28,8 @@ public class TaskMapper {
     public TaskDto convertTasksToDto(Tasks tasks) {
         TaskDto taskDtoLocalObject = new TaskDto();
         taskDtoLocalObject.setId(tasks.getId());
-        taskDtoLocalObject.setTaskExecutor(userMapper.convertUserToDto(tasks.getTaskExecutor()));
-        taskDtoLocalObject.setTaskAuthor(userMapper.convertUserToDto(tasks.getTaskAuthor()));
+       /* taskDtoLocalObject.setTaskExecutor(userMapper.convertUserToDto(tasks.getTaskExecutor()));
+        taskDtoLocalObject.setTaskAuthor(userMapper.convertUserToDto(tasks.getTaskAuthor()));*/
         taskDtoLocalObject.setTaskPriority(tasks.getTaskPriority());
         taskDtoLocalObject.setTaskStatus(tasks.getTaskStatus());
         taskDtoLocalObject.setDescription(tasks.getDescription());
@@ -38,7 +40,7 @@ public class TaskMapper {
 
     public Tasks compareTaskAndDto(TaskDto taskDto, Tasks tasks){
         //author
-        if(taskDto.getTaskAuthor().getName() != null && !taskDto.getTaskAuthor().getName()
+       /* if(taskDto.getTaskAuthor().getName() != null && !taskDto.getTaskAuthor().getName()
                 .equals(tasks.getTaskAuthor().getName())){
 
             tasks.getTaskAuthor().setName(taskDto.getTaskAuthor().getName());
@@ -68,7 +70,7 @@ public class TaskMapper {
                 .equals(tasks.getTaskExecutor().getEmail())){
 
             tasks.getTaskExecutor().setEmail(taskDto.getTaskExecutor().getEmail());
-        }
+        }*/
         //desctiption
         if(taskDto.getDescription() != null && !taskDto.getDescription()
                 .equals(tasks.getDescription())){

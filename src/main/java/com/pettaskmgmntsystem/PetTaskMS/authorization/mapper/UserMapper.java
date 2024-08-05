@@ -1,12 +1,15 @@
+/*
 package com.pettaskmgmntsystem.PetTaskMS.authorization.mapper;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.Users;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.UserDto;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
 
-    public Users convertDtoToUser(UserDto userDto) {
-        Users usersLocalObject = new Users();
+    public CustomUsers convertDtoToUser(UserDto userDto) {
+        CustomUsers usersLocalObject = new CustomUsers();
         usersLocalObject.setEmail(userDto.getEmail());
         usersLocalObject.setPasswordKey(userDto.getPasswordKey());
         usersLocalObject.setId(userDto.getId());
@@ -15,7 +18,7 @@ public class UserMapper {
         return usersLocalObject;
     }
 
-    public UserDto convertUserToDto(Users users) {
+    public UserDto convertUserToDto(CustomUsers users) {
         UserDto userDtoLocalObject = new UserDto();
         userDtoLocalObject.setEmail(users.getEmail());
         userDtoLocalObject.setPasswordKey(users.getPasswordKey());
@@ -25,3 +28,4 @@ public class UserMapper {
         return userDtoLocalObject;
     }
 }
+*/

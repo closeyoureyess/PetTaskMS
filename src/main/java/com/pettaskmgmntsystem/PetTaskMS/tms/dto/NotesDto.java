@@ -4,9 +4,11 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class NotesDto {
+public class NotesDto implements Serializable {
 
     private int id;
 

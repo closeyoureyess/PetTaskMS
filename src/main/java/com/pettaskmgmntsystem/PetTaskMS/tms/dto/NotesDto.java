@@ -1,6 +1,6 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.dto;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.UserDto;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,16 +12,16 @@ public class NotesDto implements Serializable {
 
     private int id;
 
-    private UserDto usersDto;
+    private CustomUsersDto usersDto;
 
     private String comments;
 
-    public NotesDto(UserDto usersDto, String comments) {
+    public NotesDto(CustomUsersDto usersDto, String comments) {
         this.usersDto = usersDto;
         this.comments = comments;
     }
 
-    public NotesDto(UserDto usersDto) {
+    public NotesDto(CustomUsersDto usersDto) {
         this.usersDto = usersDto;
     }
 

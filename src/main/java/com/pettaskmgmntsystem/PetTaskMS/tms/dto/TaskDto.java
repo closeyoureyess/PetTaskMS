@@ -1,6 +1,6 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.dto;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.UserDto;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Notes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,8 +16,8 @@ public class TaskDto implements Serializable {
 
     private int id;
 
-    private UserDto taskAuthor;
-    private UserDto taskExecutor;
+    private CustomUsersDto taskAuthor;
+    private CustomUsersDto taskExecutor;
 
     private Notes notes;
 

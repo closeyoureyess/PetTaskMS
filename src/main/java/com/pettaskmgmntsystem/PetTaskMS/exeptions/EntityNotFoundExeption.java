@@ -1,4 +1,4 @@
-package com.pettaskmgmntsystem.PetTaskMS.customexeprions;
+package com.pettaskmgmntsystem.PetTaskMS.exeptions;
 
 public class EntityNotFoundExeption extends Exception{
 

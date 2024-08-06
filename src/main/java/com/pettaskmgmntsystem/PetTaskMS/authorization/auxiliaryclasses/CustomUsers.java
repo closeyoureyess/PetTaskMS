@@ -17,12 +17,6 @@ public class CustomUsers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name_user")
-    private String name;
-
-    @Column(name = "surname_user")
-    private String surname;
-
     @Column(name = "email_user")
     private String email;
 
@@ -32,18 +26,10 @@ public class CustomUsers {
     @Column(name = "role_user")
     private String role;
 
-    public CustomUsers(int id, String name, String surname, String email, String passwordKey) {
+    public CustomUsers(int id, String email, String passwordKey) {
         this.id = id;
-        this.name = name;
-        this.surname = surname;
         this.email = email;
         this.passwordKey = passwordKey;
-    }
-
-    public CustomUsers(int id, String passwordKey, String email) {
-        this.id = id;
-        this.passwordKey = passwordKey;
-        this.email = email;
     }
 
     public CustomUsers(int id, String passwordKey) {
@@ -70,14 +56,12 @@ public class CustomUsers {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CustomUsers customUsers = (CustomUsers) o;
-        return id == customUsers.id && Objects.equals(name, customUsers.name)
-                && Objects.equals(surname, customUsers.surname) && Objects.equals(email, customUsers.email) && Objects.equals(passwordKey, customUsers.passwordKey);
+        CustomUsers that = (CustomUsers) o;
+        return id == that.id && Objects.equals(email, that.email) && Objects.equals(passwordKey, that.passwordKey) && Objects.equals(role, that.role);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, email, passwordKey);
+        return Objects.hash(id, email, passwordKey, role);
     }
-
 }

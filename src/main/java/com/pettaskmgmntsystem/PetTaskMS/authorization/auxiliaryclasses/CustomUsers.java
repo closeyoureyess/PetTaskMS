@@ -2,7 +2,9 @@ package com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
@@ -11,6 +13,8 @@ import java.util.Objects;
 @Table(name = "users_credentials")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomUsers {
 
     @Id
@@ -25,32 +29,6 @@ public class CustomUsers {
 
     @Column(name = "role_user")
     private String role;
-
-    public CustomUsers(int id, String email, String passwordKey) {
-        this.id = id;
-        this.email = email;
-        this.passwordKey = passwordKey;
-    }
-
-    public CustomUsers(int id, String passwordKey) {
-        this.id = id;
-        this.passwordKey = passwordKey;
-    }
-
-    public CustomUsers(String email, int... id) {
-        this.email = email;
-    }
-
-    public CustomUsers(String passwordKey) {
-        this.passwordKey = passwordKey;
-    }
-
-    public CustomUsers(int id) {
-        this.id = id;
-    }
-
-    public CustomUsers() {
-    }
 
     @Override
     public boolean equals(Object o) {

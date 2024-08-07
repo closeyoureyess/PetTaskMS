@@ -1,4 +1,4 @@
-package com.pettaskmgmntsystem.PetTaskMS.authorization;
+package com.pettaskmgmntsystem.PetTaskMS.authorization.service;
 
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
@@ -39,7 +39,7 @@ public class MyUserDetailService implements UserDetailsService {
 
     private String getRoles(CustomUsers customUsers) {
         if (customUsers.getRole() == null) {
-            return ConstantsClass.adminRole;
+            return ConstantsClass.USERROLE;
         } else {
             return customUsers.getRole();
         }

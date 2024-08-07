@@ -1,6 +1,8 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -8,31 +10,15 @@ import java.io.Serializable;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomUsersDto implements Serializable {
 
     private int id;
 
     private String passwordKey;
     private String email;
-
-    public CustomUsersDto(int id, String passwordKey, String email) {
-        this.id = id;
-        this.passwordKey = passwordKey;
-        this.email = email;
-    }
-    public CustomUsersDto(String passwordKey, String email) {
-
-        this.passwordKey = passwordKey;
-        this.email = email;
-    }
-
-    public CustomUsersDto(int id) {
-        this.id = id;
-    }
-
-    public CustomUsersDto() {
-    }
-
+    private String role;
     @Override
     public int hashCode() {
         return super.hashCode();

@@ -1,10 +1,13 @@
-package com.pettaskmgmntsystem.PetTaskMS;
+package com.pettaskmgmntsystem.PetTaskMS.authorization.config;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.MyUserDetailService;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.service.MyUserDetailService;
+import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +16,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.security.Provider;
 
 @Configuration
 @EnableWebSecurity
@@ -23,21 +29,26 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter();
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("registration/v2/user").permitAll();
-                    registry.requestMatchers("tasksapi/v2/auth").permitAll();
-                    registry.requestMatchers("tasksapi/v2/task/**").hasRole("ADMIN");
+                    registry.requestMatchers("entry/v2/**").permitAll();
+                    registry.requestMatchers("tasksapi/v2/**").hasRole(ConstantsClass.USERROLE);
                     registry.anyRequest().authenticated(); // Любой запрос должен быть аутентифицирован
                 })
-                .formLogin(formLogin -> formLogin.permitAll())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
     public UserDetailsService userDetailsService() {
         return myUserDetailService;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(){
+        return new ProviderManager(authenticationProvider());
     }
 
     @Bean

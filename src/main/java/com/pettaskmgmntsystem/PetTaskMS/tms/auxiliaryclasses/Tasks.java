@@ -86,17 +86,6 @@ public class Tasks {
         this.taskPriority = taskPriority;
     }
 
-   /* public Tasks(int id, CustomUsers taskAuthor, CustomUsers taskExecutor) {
-        this.id = id;
-        this.taskAuthor = taskAuthor;
-        this.taskExecutor = taskExecutor;
-    }*/
-
-    /*public Tasks(int id, CustomUsers taskAuthor) {
-        this.id = id;
-        this.taskAuthor = taskAuthor;
-    }*/
-
     public Tasks(int id) {
         this.id = id;
     }

@@ -17,11 +17,6 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping("/auth")
-    public ResponseEntity<TaskDto> authorization(@RequestBody TaskDto taskDto){
-        return ResponseEntity.ok(taskDto);
-    }
-
     @PostMapping("/task/create")
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto){
         log.info("Создание задачи, POST ");

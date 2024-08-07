@@ -1,42 +1,56 @@
+/*
 package com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses;
 
-/*import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;*/
+*/
+/*import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;*//*
+
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 
 @Entity
 @Table(name = "notess")
 @Getter
 @Setter
-public class Notes implements Serializable {
+public class Notes {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    /*@ManyToOne
-    @JoinColumn(name = "user_id")*/
-   /* private CustomUsers users;
-*/
+    */
+/*@ManyToOne
+    @JoinColumn(name = "user_id")*//*
+
+    */
+/* private CustomUsers users;
+     *//*
+
     @Column(name = "comments")
     private String comments;
 
-    /*public Notes(CustomUsers users, String comments) {
+    */
+/*public Notes(CustomUsers users, String comments) {
         this.users = users;
         this.comments = comments;
-    }*/
+    }*//*
 
-   /* public Notes(CustomUsers users) {
+
+   */
+/* public Notes(CustomUsers users) {
         this.users = users;
-    }*/
+    }*//*
+
 
     public Notes(String comments) {
         this.comments = comments;
     }
 
-    public Notes(){
+    public Notes() {
     }
 }
+*/

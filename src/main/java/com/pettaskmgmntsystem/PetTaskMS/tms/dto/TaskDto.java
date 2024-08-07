@@ -1,7 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.dto;
 
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
-import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Notes;
+/*import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Notes;*/
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,7 +19,7 @@ public class TaskDto implements Serializable {
     private CustomUsersDto taskAuthor;
     private CustomUsersDto taskExecutor;
 
-    private Notes notes;
+/*    private Notes notes;*/
 
     private String taskPriority;
     private String taskStatus;

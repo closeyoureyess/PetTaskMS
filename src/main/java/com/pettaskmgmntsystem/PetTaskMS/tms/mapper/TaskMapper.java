@@ -21,7 +21,7 @@ public class TaskMapper {
         taskLocalObject.setTaskStatus(taskDto.getTaskStatus());
         taskLocalObject.setDescription(taskDto.getDescription());
         taskLocalObject.setHeader(taskDto.getHeader());
-        taskLocalObject.setNotes(taskDto.getNotes());
+        /*taskLocalObject.setNotes(taskDto.getNotes());*/
         return taskLocalObject;
     }
 
@@ -34,7 +34,7 @@ public class TaskMapper {
         taskDtoLocalObject.setTaskStatus(tasks.getTaskStatus());
         taskDtoLocalObject.setDescription(tasks.getDescription());
         taskDtoLocalObject.setHeader(tasks.getHeader());
-        taskDtoLocalObject.setNotes(tasks.getNotes());
+        /*taskDtoLocalObject.setNotes(tasks.getNotes());*/
         return taskDtoLocalObject;
     }
 

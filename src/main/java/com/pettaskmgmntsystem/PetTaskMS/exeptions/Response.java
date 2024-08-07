@@ -13,6 +13,4 @@ import lombok.Setter;
 public class Response {
 
     private String responseExeption;
-
-
 }

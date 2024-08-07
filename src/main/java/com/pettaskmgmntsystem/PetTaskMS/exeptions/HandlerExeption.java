@@ -1,4 +1,4 @@
-package com.pettaskmgmntsystem.PetTaskMS.exeptions;
+/*package com.pettaskmgmntsystem.PetTaskMS.exeptions;
 
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
@@ -15,17 +15,15 @@ import java.util.Arrays;
 public class HandlerExeption {
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<Response> handleAnyExeption(UsernameNotFoundException e){
+    public ResponseEntity<Response> handleUserNameException(UsernameNotFoundException e){
         log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
-        Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.OK);
     }
 
     @ExceptionHandler(ServletException.class)
-    public ResponseEntity<Response> handle(ServletException e){
-        log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
-        Response response = new Response(e.getMessage());
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<Response> handleServletException(ServletException e){
+        log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
+        return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.OK);
     }
 
-}
+}*/

@@ -1,6 +1,5 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.service.webtoken;
 
-import ch.qos.logback.classic.ClassicConstants;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

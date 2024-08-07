@@ -5,13 +5,10 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.service.MyUserDetailServic
 import com.pettaskmgmntsystem.PetTaskMS.authorization.service.webtoken.JwtService;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.service.UserService;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
-import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

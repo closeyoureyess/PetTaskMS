@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("entry/v2")
+@RequestMapping
 @Slf4j
 public class EntranceController {
 
@@ -30,7 +30,7 @@ public class EntranceController {
     private MyUserDetailService myUserDetailService;
 
 
-    @PostMapping("/registration")
+    @PostMapping("/entrance/registration")
     public ResponseEntity<CustomUsersDto> createUsers(@RequestBody CustomUsersDto customUsersDto) {
         CustomUsersDto customUsersDtoLocal = userService.createUser(customUsersDto);
         if (customUsersDtoLocal != null) {
@@ -39,7 +39,7 @@ public class EntranceController {
         return ResponseEntity.internalServerError().build();
     }
 
-    @PostMapping("/authorization")
+    @PostMapping("/entrance/authorization")
     public ResponseEntity<String> authorizationUser(@RequestBody LoginForm loginForm) throws UsernameNotFoundException {
         log.info("Метод авторизации, POST ");
         String jwtToken = userService.authorizationUser(loginForm);

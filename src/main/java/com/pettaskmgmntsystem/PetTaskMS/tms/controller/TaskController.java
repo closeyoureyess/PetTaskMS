@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("tasksapi/v2")
+@RequestMapping
 @Slf4j
 public class TaskController {
 
@@ -20,7 +20,8 @@ public class TaskController {
     @PostMapping("/task/create")
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto taskDto){
         log.info("Создание задачи, POST ");
-        return ResponseEntity.ok(taskDto);
+        TaskDto localTaskDto = taskService.createTasks(taskDto);
+        return ResponseEntity.ok(localTaskDto);
     }
 
     @GetMapping("/task/gen-info/{author}")

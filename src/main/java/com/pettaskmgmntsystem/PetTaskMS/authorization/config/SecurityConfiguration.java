@@ -35,8 +35,8 @@ public class SecurityConfiguration {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("entry/v2/**").permitAll();
-                    registry.requestMatchers("tasksapi/v2/task/**").hasRole(ConstantsClass.USERROLE);
+                    registry.requestMatchers("/entrance/**").permitAll();
+                    registry.requestMatchers("/task/**").hasRole(ConstantsClass.USERROLE);
                     registry.anyRequest().authenticated(); // Любой запрос должен быть аутентифицирован
                 })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

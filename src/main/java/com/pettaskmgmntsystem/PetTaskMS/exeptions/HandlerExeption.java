@@ -1,4 +1,4 @@
-/*package com.pettaskmgmntsystem.PetTaskMS.exeptions;
+package com.pettaskmgmntsystem.PetTaskMS.exeptions;
 
 import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
@@ -26,4 +26,4 @@ public class HandlerExeption {
         return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.OK);
     }
 
-}*/
+}

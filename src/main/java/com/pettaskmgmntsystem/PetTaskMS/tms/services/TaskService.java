@@ -1,6 +1,6 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.services;
 
-import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Tasks;
+import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TaskDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.mapper.TaskMapper;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.TasksRepository;

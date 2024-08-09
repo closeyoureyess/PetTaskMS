@@ -1,7 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.service;
 
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.LoginForm;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;

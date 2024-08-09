@@ -1,9 +1,11 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.dto;
 
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
-/*import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Notes;*/
+/*import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Notes;*/
+import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Notes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -12,6 +14,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class TaskDto implements Serializable {
 
     private int id;
@@ -19,16 +22,12 @@ public class TaskDto implements Serializable {
     private CustomUsersDto taskAuthor;
     private CustomUsersDto taskExecutor;
 
-/*    private Notes notes;*/
+    private NotesDto notesDto;
 
     private String taskPriority;
     private String taskStatus;
     private String header;
     private String description;
-
-
-    public TaskDto(){
-    }
 
     @Override
     public int hashCode() {

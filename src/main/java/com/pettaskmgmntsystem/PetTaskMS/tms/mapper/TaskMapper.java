@@ -1,7 +1,8 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.mapper;
 
 /*import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;*/
-import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.Tasks;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
+import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TaskDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -9,19 +10,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class TaskMapper {
 
-/*    @Autowired
-    UserMapper userMapper;*/
+    @Autowired
+    private UserMapper userMapper;
 
     public Tasks convertDtoToTasks(TaskDto taskDto) {
         Tasks taskLocalObject = new Tasks();
         taskLocalObject.setId(taskDto.getId());
-        /*taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(taskDto.getTaskExecutor()));
-        taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(taskDto.getTaskAuthor()));*/
+        taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(taskDto.getTaskExecutor()));
+        taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(taskDto.getTaskAuthor()));
         taskLocalObject.setTaskPriority(taskDto.getTaskPriority());
         taskLocalObject.setTaskStatus(taskDto.getTaskStatus());
         taskLocalObject.setDescription(taskDto.getDescription());
         taskLocalObject.setHeader(taskDto.getHeader());
-        /*taskLocalObject.setNotes(taskDto.getNotes());*/
+        taskLocalObject.setNotes(taskDto);
         return taskLocalObject;
     }
 
@@ -39,8 +40,8 @@ public class TaskMapper {
     }
 
     public Tasks compareTaskAndDto(TaskDto taskDto, Tasks tasks){
-        //author
-       /* if(taskDto.getTaskAuthor().getName() != null && !taskDto.getTaskAuthor().getName()
+       /* //author
+        if(taskDto.getTaskAuthor().getName() != null && !taskDto.getTaskAuthor().getName()
                 .equals(tasks.getTaskAuthor().getName())){
 
             tasks.getTaskAuthor().setName(taskDto.getTaskAuthor().getName());
@@ -70,7 +71,7 @@ public class TaskMapper {
                 .equals(tasks.getTaskExecutor().getEmail())){
 
             tasks.getTaskExecutor().setEmail(taskDto.getTaskExecutor().getEmail());
-        }*/
+        }
         //desctiption
         if(taskDto.getDescription() != null && !taskDto.getDescription()
                 .equals(tasks.getDescription())){
@@ -88,7 +89,7 @@ public class TaskMapper {
                 .equals(tasks.getTaskStatus())){
 
             tasks.setTaskStatus(taskDto.getTaskStatus());
-        }
+        }*/
         return tasks;
     }
 }

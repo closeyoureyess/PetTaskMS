@@ -2,7 +2,7 @@ package com.pettaskmgmntsystem.PetTaskMS.authorization.service;
 
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
-import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

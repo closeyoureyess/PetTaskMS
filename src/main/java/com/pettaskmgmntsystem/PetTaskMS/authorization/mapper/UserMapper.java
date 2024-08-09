@@ -1,6 +1,6 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.mapper;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
-package com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses;
+package com.pettaskmgmntsystem.PetTaskMS.tms.repository;
 
-/*import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.CustomUsers;*/
+import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,29 +21,29 @@ public class Tasks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    /*@ManyToOne
-    @JoinColumn(name = "tasks_author_id")*/
-    /*private CustomUsers taskAuthor;
-
-    @ManyToOne
-    @JoinColumn(name = "tasks_executor_id")
-    private CustomUsers taskExecutor;*/
-
-    @Column(name = "tasks_priority")
-    private String taskPriority;
+    @Column(name = "tasks_header")
+    private String header;
 
     @Column(name = "tasks_status")
     private String taskStatus;
 
-    @Column(name = "tasks_header")
-    private String header;
-
     @Column(name = "tasks_description")
     private String description;
 
-    /*@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "tasks_notes_id")*/
-   /* private Notes notes;*/
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL
+    @JoinColumn(name = "tasks_executor_id")
+    private CustomUsers taskExecutor;
+
+    @Column(name = "tasks_priority")
+    private String taskPriority;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL,
+    @JoinColumn(name = "tasks_author_id")
+    private CustomUsers taskAuthor;
+
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "tasks_notes_id")
+    private Notes notes;
 
 
     @Override

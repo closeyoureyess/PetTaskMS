@@ -1,12 +1,14 @@
-package com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses;
+package com.pettaskmgmntsystem.PetTaskMS.authorization.repository;
 
 
+import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -29,6 +31,9 @@ public class CustomUsers {
 
     @Column(name = "role_user")
     private String role;
+
+    @OneToMany
+    private List<Tasks> allTasks;
 
     @Override
     public boolean equals(Object o) {

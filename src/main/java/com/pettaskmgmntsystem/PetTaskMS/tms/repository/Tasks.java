@@ -45,17 +45,16 @@ public class Tasks {
     @JoinColumn(name = "tasks_notes_id")
     private Notes notes;
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tasks tasks = (Tasks) o;
-        return id == tasks.id && Objects.equals(taskPriority, tasks.taskPriority) && Objects.equals(taskStatus, tasks.taskStatus) && Objects.equals(header, tasks.header) && Objects.equals(description, tasks.description);
+        return id == tasks.id && Objects.equals(header, tasks.header) && Objects.equals(taskStatus, tasks.taskStatus) && Objects.equals(description, tasks.description) && Objects.equals(taskExecutor, tasks.taskExecutor) && Objects.equals(taskPriority, tasks.taskPriority) && Objects.equals(taskAuthor, tasks.taskAuthor) && Objects.equals(notes, tasks.notes);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, taskPriority, taskStatus, header, description);
+        return Objects.hash(id, header, taskStatus, description, taskExecutor, taskPriority, taskAuthor, notes);
     }
 }

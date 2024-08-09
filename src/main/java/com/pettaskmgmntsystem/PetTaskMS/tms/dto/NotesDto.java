@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -21,12 +22,15 @@ public class NotesDto implements Serializable {
     private String comments;
 
     @Override
-    public int hashCode() {
-        return super.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NotesDto notesDto = (NotesDto) o;
+        return id == notesDto.id && Objects.equals(usersDto, notesDto.usersDto) && Objects.equals(comments, notesDto.comments);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public int hashCode() {
+        return Objects.hash(id, usersDto, comments);
     }
 }

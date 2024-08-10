@@ -5,6 +5,7 @@ import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,10 +19,13 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/task/create")
-    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto){
-        log.info("Создание задачи, POST ");
+    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto) throws UsernameNotFoundException {
+        log.info("Создание задачи, POST " + tasksDto.getHeader());
         TasksDto localTasksDto = taskService.createTasks(tasksDto);
-        return ResponseEntity.ok(localTasksDto);
+        if (localTasksDto != null) {
+            return ResponseEntity.ok(localTasksDto);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/task/gen-info/{author}")
@@ -44,7 +48,7 @@ public class TaskController {
     }
 
     @PutMapping("/task/update-tasks")
-    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto){
+    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) {
         return ResponseEntity.ok(null);
     }
 

@@ -21,7 +21,7 @@ public class CustomUsers {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "email_user")
     private String email;

@@ -19,27 +19,27 @@ public class Tasks {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name = "tasks_header")
-    private String header;
+    private String header; //
 
     @Column(name = "tasks_status")
-    private String taskStatus;
+    private String taskStatus; //
 
     @Column(name = "tasks_description")
-    private String description;
+    private String description;  //
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL
     @JoinColumn(name = "tasks_executor_id")
-    private CustomUsers taskExecutor;
+    private CustomUsers taskExecutor; //
 
     @Column(name = "tasks_priority")
     private String taskPriority;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL,
     @JoinColumn(name = "tasks_author_id")
-    private CustomUsers taskAuthor;
+    private CustomUsers taskAuthor; //
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "tasks_notes_id")

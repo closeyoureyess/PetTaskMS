@@ -1,5 +1,6 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,8 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class CustomUsersDto implements Serializable {
 
-    private int id;
-
+    private Integer id;
     private String passwordKey;
     private String email;
     private String role;

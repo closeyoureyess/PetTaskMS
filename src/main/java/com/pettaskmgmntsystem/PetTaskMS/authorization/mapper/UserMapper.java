@@ -13,8 +13,6 @@ public class UserMapper {
         usersLocalObject.setPasswordKey(userDto.getPasswordKey());
         usersLocalObject.setId(userDto.getId());
         usersLocalObject.setRole(userDto.getRole());
-        /*usersLocalObject.setName(userDto.getName());
-        usersLocalObject.setSurname(userDto.getSurname());*/
         return usersLocalObject;
     }
 
@@ -24,8 +22,7 @@ public class UserMapper {
         userDtoLocalObject.setPasswordKey(users.getPasswordKey());
         userDtoLocalObject.setId(users.getId());
         userDtoLocalObject.setRole(users.getRole());
-        /*userDtoLocalObject.setName(users.getName());
-        userDtoLocalObject.setSurname(users.getSurname());*/
         return userDtoLocalObject;
     }
+
 }

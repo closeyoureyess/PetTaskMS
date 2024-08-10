@@ -1,11 +1,20 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.mapper;
 
 /*import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;*/
+
+import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
+import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
+import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import javax.sound.midi.MidiFileFormat;
 
 @Component
 public class TaskMapper {
@@ -14,6 +23,10 @@ public class TaskMapper {
     private UserMapper userMapper;
     @Autowired
     private NotesMapper notesMapper;
+    @Autowired
+    AuthorizationRepository authorizationRepository;
+    @Autowired
+    UserActions userActions;
 
     public Tasks convertDtoToTasks(TasksDto tasksDto) {
         Tasks taskLocalObject = new Tasks();
@@ -41,57 +54,98 @@ public class TaskMapper {
         return tasksDtoLocalObject;
     }
 
-    public Tasks compareTaskAndDto(TasksDto tasksDto, Tasks tasks){
+    public Tasks compareTaskAndDto(TasksDto tasksDto, Tasks tasks) throws UsernameNotFoundException {
         //author
-        /*if(tasksDto.getTaskAuthor().getEmail() != null && !tasksDto.getTaskAuthor().getEmail()
-                .equals(tasks.getTaskAuthor().getEmail())){
-
-            tasks.getTaskAuthor().setEmail(tasksDto.getTaskAuthor().getEmail());
-        }
-        if(tasksDto.getTaskAuthor().getSurname() != null && !tasksDto.getTaskAuthor().getSurname()
-                .equals(tasks.getTaskAuthor().getSurname())){
-
-            tasks.getTaskAuthor().setSurname(tasksDto.getTaskAuthor().getSurname());
-        }
-        if(tasksDto.getTaskAuthor().getEmail() != null && !tasksDto.getTaskAuthor().getEmail()
-                .equals(tasks.getTaskAuthor().getEmail())){
-
-            tasks.getTaskAuthor().setEmail(tasksDto.getTaskAuthor().getEmail());
-        }
+        tasks = compareTaskAndDtoAuthor(tasksDto, tasks);
         //executor
-        if(tasksDto.getTaskExecutor().getName() != null && !tasksDto.getTaskExecutor().getName()
-                .equals(tasks.getTaskExecutor().getName())){
-
-            tasks.getTaskExecutor().setName(tasksDto.getTaskExecutor().getName());
-        }
-        if(tasksDto.getTaskExecutor().getSurname() != null && !tasksDto.getTaskExecutor().getSurname()
-                .equals(tasks.getTaskExecutor().getSurname())){
-
-            tasks.getTaskExecutor().setSurname(tasksDto.getTaskExecutor().getSurname());
-        }
-        if(tasksDto.getTaskExecutor().getEmail() != null && !tasksDto.getTaskExecutor().getEmail()
-                .equals(tasks.getTaskExecutor().getEmail())){
-
-            tasks.getTaskExecutor().setEmail(tasksDto.getTaskExecutor().getEmail());
-        }
+        tasks = compareTasksAndDtoExecutor(tasksDto, tasks);
         //desctiption
-        if(tasksDto.getDescription() != null && !tasksDto.getDescription()
-                .equals(tasks.getDescription())){
+        tasks = compareTasksAndDtoDescription(tasksDto, tasks);
+        //priority
+        tasks = compareTasksAndDtoPriority(tasksDto, tasks);
+        //header
+        tasks = compareTasksAndDtoHeader(tasksDto, tasks);
+        //status
+        tasks = compareTasksAndDtoStatus(tasksDto, tasks);
+        //notes
+        tasks = compareTasksAndDtoNotes(tasksDto, tasks);
+        return tasks;
+    }
+
+    private Tasks compareTaskAndDtoAuthor(TasksDto tasksDto, Tasks tasks) throws UsernameNotFoundException {
+        if (!tasksDto.getTaskAuthor().getEmail().equals(tasks.getTaskAuthor().getEmail())
+                ||
+                !tasksDto.getTaskAuthor().getId().equals(tasks.getTaskAuthor().getId())) {
+
+            Tasks newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
+                    ConstantsClass.REGIME_OVERWRITING);
+            if (newTasks != null) {
+                tasks.setTaskAuthor(newTasks.getTaskAuthor());
+            }
+        } else {
+            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumUser());
+        }
+        return tasks;
+    }
+
+    private Tasks compareTasksAndDtoExecutor(TasksDto tasksDto, Tasks tasks) throws UsernameNotFoundException {
+        if (!tasksDto.getTaskExecutor().getEmail().equals(tasks.getTaskExecutor().getEmail())
+                ||
+                !tasksDto.getTaskExecutor().getId().equals(tasks.getTaskExecutor().getId())) {
+
+            Tasks newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()), tasks,
+                    ConstantsClass.REGIME_RECORD);
+            if (newTasks != null) {
+                tasks.setTaskExecutor(newTasks.getTaskExecutor());
+            }
+        } else {
+            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumUser());
+        }
+        return tasks;
+    }
+
+    private Tasks compareTasksAndDtoDescription(TasksDto tasksDto, Tasks tasks) {
+        if (tasksDto.getDescription() != null && !tasksDto.getDescription()
+                .equals(tasks.getDescription())) {
 
             tasks.setDescription(tasksDto.getDescription());
         }
-        //priority
-        if(tasksDto.getTaskPriority() != null && !tasksDto.getTaskPriority()
-                .equals(tasks.getTaskPriority())){
+        return tasks;
+    }
+
+    private Tasks compareTasksAndDtoPriority(TasksDto tasksDto, Tasks tasks) {
+        if (tasksDto.getTaskPriority() != null && !tasksDto.getTaskPriority()
+                .equals(tasks.getTaskPriority())) {
 
             tasks.setTaskPriority(tasksDto.getTaskPriority());
         }
-        //status
-        if(tasksDto.getTaskStatus() != null && !tasksDto.getTaskStatus()
-                .equals(tasks.getTaskStatus())){
+        return tasks;
+    }
+
+    private Tasks compareTasksAndDtoHeader(TasksDto tasksDto, Tasks tasks) {
+        if (tasksDto.getHeader() != null && !tasksDto.getHeader().equals(tasks.getHeader())) {
+
+            tasks.setHeader(tasksDto.getHeader());
+        }
+        return tasks;
+    }
+
+    private Tasks compareTasksAndDtoStatus(TasksDto tasksDto, Tasks tasks) {
+        if ((tasks.getTaskExecutor().getEmail().equals(userActions.getCurrentUser().get().getEmail()))
+                && (tasksDto.getTaskStatus() != null && !tasksDto.getTaskStatus().equals(tasks.getTaskStatus()))) {
 
             tasks.setTaskStatus(tasksDto.getTaskStatus());
-        }*/
+        }
+        return tasks;
+    }
+
+    private Tasks compareTasksAndDtoNotes(TasksDto tasksDto, Tasks tasks) {
+        if ((tasksDto.getNotesDto() != null) && !tasksDto.getNotesDto().getComments()
+                .equals(tasks.getNotes().getComments())) {
+
+            tasks.getNotes().setComments(tasks.getNotes().getComments());
+            tasks.getNotes().setUsers(userActions.getCurrentUser().get());
+        }
         return tasks;
     }
 }

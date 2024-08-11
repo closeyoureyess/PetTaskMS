@@ -6,6 +6,7 @@ import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,8 +35,8 @@ public class UserActions {
     }
 
     public Optional<CustomUsers> getCurrentUser() {
-        var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return authorizationRepository.findByEmail(userDetails.getUsername());
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        return authorizationRepository.findByEmail(loggedInUser.getName());
     }
 
     private Optional<CustomUsers> searchUserEmailOrId(CustomUsers customUsers){

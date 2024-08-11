@@ -1,7 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.services;
 
-import ch.qos.logback.classic.ClassicConstants;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
@@ -9,30 +9,37 @@ import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import com.pettaskmgmntsystem.PetTaskMS.tms.mapper.TaskMapper;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.TasksRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class TaskService {
 
+    @Autowired
+    UserMapper userMapper;
     @Autowired
     private TaskMapper taskMapper;
     @Autowired
     private TasksRepository tasksRepository;
     @Autowired
-    AuthorizationRepository authorizationRepository;
+    private AuthorizationRepository authorizationRepository;
     @Autowired
-    UserActions userActions;
+    private UserActions userActions;
 
     public TasksDto createTasks(TasksDto tasksDto) throws UsernameNotFoundException {
-        Tasks newTasks = new Tasks();
+        if(tasksDto.getTaskExecutor() == null){
+            log.info("TESSSSSSSSSSSSSSSSTTTTTTTT" + tasksDto.getTaskExecutor().getEmail());
+        } else {
+            log.info("BAAAAAAABBBBBB" + tasksDto.getTaskExecutor().getEmail());
+        }
+        Tasks newTasks;
         Optional<CustomUsers> optionalAuthorizedUser = userActions.getCurrentUser();
-        newTasks.setTaskAuthor(optionalAuthorizedUser.get());
+        tasksDto.setTaskAuthor(userMapper.convertUserToDto(optionalAuthorizedUser.get()));
         newTasks = taskMapper.convertDtoToTasks(tasksDto);
         CustomUsers customUsers = newTasks.getTaskExecutor();
         newTasks = userActions.checkFindUser(customUsers, newTasks, ConstantsClass.REGIME_RECORD);

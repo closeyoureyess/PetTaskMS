@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,7 @@ public class EntranceController {
 
 
     @PostMapping("/entrance/registration")
-    public ResponseEntity<CustomUsersDto> createUsers(@RequestBody CustomUsersDto customUsersDto) {
+    public ResponseEntity<CustomUsersDto> createUsers(@RequestBody @Validated CustomUsersDto customUsersDto) {
         CustomUsersDto customUsersDtoLocal = userService.createUser(customUsersDto);
         if (customUsersDtoLocal != null) {
             return ResponseEntity.ok(customUsersDtoLocal);
@@ -41,7 +42,7 @@ public class EntranceController {
 
     @PostMapping("/entrance/authorization")
     public ResponseEntity<String> authorizationUser(@RequestBody LoginForm loginForm) throws UsernameNotFoundException {
-        log.info("Метод авторизации, POST ");
+        log.info("Метод авторизации, POST " + loginForm.getEmail());
         String jwtToken = userService.authorizationUser(loginForm);
         if (jwtToken != null) {
             return ResponseEntity.ok(jwtToken);

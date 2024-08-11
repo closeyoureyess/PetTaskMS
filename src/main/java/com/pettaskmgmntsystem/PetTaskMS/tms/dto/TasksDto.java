@@ -1,9 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.dto;
 
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
-/*import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Notes;*/
-import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,7 +19,7 @@ public class TasksDto implements Serializable {
 
     private Integer id;
     private CustomUsersDto taskAuthor;
-    @NotBlank(message = ConstantsClass.NOTBLANK_EXCEPTION + "taskExecutor")
+    @Valid
     private CustomUsersDto taskExecutor;
     private NotesDto notesDto;
     private String taskPriority;

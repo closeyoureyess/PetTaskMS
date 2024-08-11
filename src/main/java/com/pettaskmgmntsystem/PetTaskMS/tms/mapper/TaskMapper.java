@@ -1,7 +1,5 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.mapper;
 
-/*import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;*/
-
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
@@ -10,11 +8,8 @@ import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.config.Task;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import javax.sound.midi.MidiFileFormat;
 
 @Component
 public class TaskMapper {

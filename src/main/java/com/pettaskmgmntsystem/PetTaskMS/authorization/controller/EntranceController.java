@@ -5,6 +5,7 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.service.MyUserDetailServic
 import com.pettaskmgmntsystem.PetTaskMS.authorization.service.webtoken.JwtService;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.service.UserService;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +33,7 @@ public class EntranceController {
 
 
     @PostMapping("/entrance/registration")
-    public ResponseEntity<CustomUsersDto> createUsers(@RequestBody @Validated CustomUsersDto customUsersDto) {
+    public ResponseEntity<CustomUsersDto> createUsers(@RequestBody CustomUsersDto customUsersDto) {
         CustomUsersDto customUsersDtoLocal = userService.createUser(customUsersDto);
         if (customUsersDtoLocal != null) {
             return ResponseEntity.ok(customUsersDtoLocal);

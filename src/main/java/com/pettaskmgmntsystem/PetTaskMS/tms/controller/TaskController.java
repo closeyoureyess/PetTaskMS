@@ -14,7 +14,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping
-@Validated
 @Slf4j
 public class TaskController {
 

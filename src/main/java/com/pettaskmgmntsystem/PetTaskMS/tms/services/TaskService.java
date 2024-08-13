@@ -33,10 +33,9 @@ public class TaskService {
     private UserActions userActions;
 
     public TasksDto createTasks(TasksDto tasksDto) throws UsernameNotFoundException {
-        Tasks newTasks;
         Optional<CustomUsers> optionalAuthorizedUser = userActions.getCurrentUser();
         tasksDto.setTaskAuthor(userMapper.convertUserToDto(optionalAuthorizedUser.get()));
-        newTasks = taskMapper.convertDtoToTasks(tasksDto);
+        Tasks newTasks = taskMapper.convertDtoToTasks(tasksDto);
         CustomUsers customUsers = newTasks.getTaskExecutor();
         newTasks = userActions.checkFindUser(customUsers, newTasks, ConstantsClass.REGIME_RECORD);
         newTasks = userActions.checkFindUser(newTasks.getTaskAuthor(), newTasks, ConstantsClass.REGIME_OVERWRITING);

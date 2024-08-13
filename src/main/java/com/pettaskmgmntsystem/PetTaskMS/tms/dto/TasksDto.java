@@ -3,11 +3,11 @@ package com.pettaskmgmntsystem.PetTaskMS.tms.dto;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -20,12 +20,19 @@ import java.util.Objects;
 public class TasksDto implements Serializable {
 
     private Integer id;
+
     private CustomUsersDto taskAuthor;
+
     private CustomUsersDto taskExecutor;
+
     private NotesDto notesDto;
+
     private String taskPriority;
+
     private String taskStatus;
+
     private String header;
+
     private String description;
 
     @Override

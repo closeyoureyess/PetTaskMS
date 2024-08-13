@@ -26,9 +26,7 @@ public class TaskMapper {
     public Tasks convertDtoToTasks(TasksDto tasksDto) {
         Tasks taskLocalObject = new Tasks();
         taskLocalObject.setId(tasksDto.getId());
-        if (tasksDto.getTaskExecutor() != null) {
-            taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
-        }
+        taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
         taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()));
         if (tasksDto.getTaskPriority() != null) {
             taskLocalObject.setTaskPriority(tasksDto.getTaskPriority());

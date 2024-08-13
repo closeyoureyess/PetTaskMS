@@ -2,8 +2,10 @@ package com.pettaskmgmntsystem.PetTaskMS.authorization.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +24,6 @@ public class CustomUsersDto implements Serializable {
 
     private String passwordKey;
 
-    @NotBlank
-    @Email
     private String email;
 
     private String role;

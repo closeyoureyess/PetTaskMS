@@ -22,7 +22,7 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/task/create")
-    public ResponseEntity<TasksDto> createTask(@Valid @RequestBody TasksDto tasksDto) throws UsernameNotFoundException {
+    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto) throws UsernameNotFoundException {
         log.info("Создание задачи, POST " + tasksDto.getHeader());
         TasksDto localTasksDto = taskService.createTasks(tasksDto);
         if (localTasksDto != null) {

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.Optional;
 
@@ -32,11 +33,6 @@ public class TaskService {
     private UserActions userActions;
 
     public TasksDto createTasks(TasksDto tasksDto) throws UsernameNotFoundException {
-        if(tasksDto.getTaskExecutor() == null){
-            log.info("TESSSSSSSSSSSSSSSSTTTTTTTT" + tasksDto.getTaskExecutor().getEmail());
-        } else {
-            log.info("BAAAAAAABBBBBB" + tasksDto.getTaskExecutor().getEmail());
-        }
         Tasks newTasks;
         Optional<CustomUsers> optionalAuthorizedUser = userActions.getCurrentUser();
         tasksDto.setTaskAuthor(userMapper.convertUserToDto(optionalAuthorizedUser.get()));

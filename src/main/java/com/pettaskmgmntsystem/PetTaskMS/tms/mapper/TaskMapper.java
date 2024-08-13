@@ -26,26 +26,52 @@ public class TaskMapper {
     public Tasks convertDtoToTasks(TasksDto tasksDto) {
         Tasks taskLocalObject = new Tasks();
         taskLocalObject.setId(tasksDto.getId());
-        taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
+        if (tasksDto.getTaskExecutor() != null) {
+            taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
+        }
         taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()));
-        taskLocalObject.setTaskPriority(tasksDto.getTaskPriority());
-        taskLocalObject.setTaskStatus(tasksDto.getTaskStatus());
-        taskLocalObject.setDescription(tasksDto.getDescription());
-        taskLocalObject.setHeader(tasksDto.getHeader());
-        taskLocalObject.setNotes(notesMapper.convertDtoToNotes(tasksDto.getNotesDto()));
+        if (tasksDto.getTaskPriority() != null) {
+            taskLocalObject.setTaskPriority(tasksDto.getTaskPriority());
+        }
+        if (tasksDto.getTaskStatus() != null) {
+            taskLocalObject.setTaskStatus(tasksDto.getTaskStatus());
+        }
+        if (tasksDto.getDescription() != null) {
+            taskLocalObject.setDescription(tasksDto.getDescription());
+        }
+        if (tasksDto.getHeader() != null) {
+            taskLocalObject.setHeader(tasksDto.getHeader());
+        }
+        if (tasksDto.getNotesDto() != null) {
+            taskLocalObject.setNotes(notesMapper.convertDtoToNotes(tasksDto.getNotesDto()));
+        }
         return taskLocalObject;
     }
 
     public TasksDto convertTasksToDto(Tasks tasks) {
         TasksDto tasksDtoLocalObject = new TasksDto();
         tasksDtoLocalObject.setId(tasks.getId());
-        tasksDtoLocalObject.setTaskExecutor(userMapper.convertUserToDto(tasks.getTaskExecutor()));
-        tasksDtoLocalObject.setTaskAuthor(userMapper.convertUserToDto(tasks.getTaskAuthor()));
-        tasksDtoLocalObject.setTaskPriority(tasks.getTaskPriority());
-        tasksDtoLocalObject.setTaskStatus(tasks.getTaskStatus());
-        tasksDtoLocalObject.setDescription(tasks.getDescription());
-        tasksDtoLocalObject.setHeader(tasks.getHeader());
-        tasksDtoLocalObject.setNotesDto(notesMapper.convertNotesToDto(tasks.getNotes()));
+        if (tasks.getTaskExecutor() != null) {
+            tasksDtoLocalObject.setTaskExecutor(userMapper.convertUserToDto(tasks.getTaskExecutor()));
+        }
+        if (tasks.getTaskAuthor() != null) {
+            tasksDtoLocalObject.setTaskAuthor(userMapper.convertUserToDto(tasks.getTaskAuthor()));
+        }
+        if (tasks.getTaskPriority() != null) {
+            tasksDtoLocalObject.setTaskPriority(tasks.getTaskPriority());
+        }
+        if (tasks.getTaskStatus() != null) {
+            tasksDtoLocalObject.setTaskStatus(tasks.getTaskStatus());
+        }
+        if (tasks.getDescription() != null) {
+            tasksDtoLocalObject.setDescription(tasks.getDescription());
+        }
+        if (tasks.getHeader() != null) {
+            tasksDtoLocalObject.setHeader(tasks.getHeader());
+        }
+        if (tasks.getNotes() != null) {
+            tasksDtoLocalObject.setNotesDto(notesMapper.convertNotesToDto(tasks.getNotes()));
+        }
         return tasksDtoLocalObject;
     }
 

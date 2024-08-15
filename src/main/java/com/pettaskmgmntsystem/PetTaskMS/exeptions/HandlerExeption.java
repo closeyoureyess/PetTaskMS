@@ -17,25 +17,31 @@ import java.util.Arrays;
 public class HandlerExeption {
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<Response> handleUserNameException(UsernameNotFoundException e){
+    protected ResponseEntity<Response> handleUserNameException(UsernameNotFoundException e){
         log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()));
         return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(ServletException.class)
-    public ResponseEntity<Response> handleServletException(ServletException e){
+    protected ResponseEntity<Response> handleServletException(ServletException e){
         log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
         return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(IOException.class)
-    public ResponseEntity<Response> handleIOException(IOException e){
+    protected ResponseEntity<Response> handleIOException(IOException e){
         log.error("Возникла ошибка, связанная с "+ e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
         return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<Response> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
+        return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ExecutorNotFoundExeption.class)
+    protected ResponseEntity<Response> handleExecutorNotFoundExeption(ExecutorNotFoundExeption e){
         log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
         return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
     }

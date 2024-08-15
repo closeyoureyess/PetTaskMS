@@ -48,7 +48,7 @@ public class UserService {
         if(authentication.isAuthenticated()){
             return jwtService.generateToken(myUserDetailService.loadUserByUsername(loginForm.getEmail()));
         } else {
-            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumUser() + " " + loginForm.getEmail());
+            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription() + " " + loginForm.getEmail());
         }
     }
 

@@ -12,19 +12,23 @@ public class NotesMapper {
     @Autowired
     private UserMapper userMapper;
 
-    public Notes convertDtoToNotes(NotesDto notesDto){
+    public Notes convertDtoToNotes(NotesDto notesDto) {
         Notes localNotes = new Notes();
-        localNotes.setId(notesDto.getId());
-        localNotes.setComments(notesDto.getComments());
-        localNotes.setUsers(userMapper.convertDtoToUser(notesDto.getUsersDto()));
+        if (notesDto != null) {
+            localNotes.setId(notesDto.getId());
+            localNotes.setComments(notesDto.getComments());
+            localNotes.setUsers(userMapper.convertDtoToUser(notesDto.getUsersDto()));
+        }
         return localNotes;
     }
 
-    public NotesDto convertNotesToDto(Notes notes){
+    public NotesDto convertNotesToDto(Notes notes) {
         NotesDto localNotesDto = new NotesDto();
-        localNotesDto.setId(notes.getId());
-        localNotesDto.setComments(notes.getComments());
-        localNotesDto.setUsersDto(userMapper.convertUserToDto(notes.getUsers()));
+        if (notes != null) {
+            localNotesDto.setId(notes.getId());
+            localNotesDto.setComments(notes.getComments());
+            localNotesDto.setUsersDto(userMapper.convertUserToDto(notes.getUsers()));
+        }
         return localNotesDto;
     }
 

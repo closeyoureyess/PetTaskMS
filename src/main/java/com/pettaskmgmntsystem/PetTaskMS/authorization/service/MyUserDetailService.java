@@ -32,7 +32,7 @@ public class MyUserDetailService implements UserDetailsService {
                     .roles(getRoles(newCustomUsers))
                     .build();
         } else {
-            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumUser() + " " + userFromDB.get().getEmail());
+            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription() + " " + userFromDB.get().getEmail());
         }
 
     }

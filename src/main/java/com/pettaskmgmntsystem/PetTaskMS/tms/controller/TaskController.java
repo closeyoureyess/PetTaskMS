@@ -1,13 +1,12 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.controller;
 
+import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/task/create")
-    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto) throws UsernameNotFoundException {
+    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto) throws UsernameNotFoundException, ExecutorNotFoundExeption {
         log.info("Создание задачи, POST " + tasksDto.getHeader());
         TasksDto localTasksDto = taskService.createTasks(tasksDto);
         if (localTasksDto != null) {

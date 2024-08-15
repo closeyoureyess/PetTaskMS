@@ -5,6 +5,7 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
+import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,24 +24,20 @@ public class TaskMapper {
     @Autowired
     UserActions userActions;
 
-    public Tasks convertDtoToTasks(TasksDto tasksDto) {
+    public Tasks convertDtoToTasks(TasksDto tasksDto) throws ExecutorNotFoundExeption {
         Tasks taskLocalObject = new Tasks();
-        taskLocalObject.setId(tasksDto.getId());
-        taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
-        taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()));
-        if (tasksDto.getTaskPriority() != null) {
+        if (tasksDto != null) {
+            taskLocalObject.setId(tasksDto.getId());
+            if (tasksDto.getTaskExecutor() != null) {
+                taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
+            } else if (tasksDto.getTaskExecutor() == null) {
+                throw new ExecutorNotFoundExeption(DescriptionUserExeption.EXECUTOR_NOT_SPECIFIED.getEnumDescription());
+            }
+            taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()));
             taskLocalObject.setTaskPriority(tasksDto.getTaskPriority());
-        }
-        if (tasksDto.getTaskStatus() != null) {
             taskLocalObject.setTaskStatus(tasksDto.getTaskStatus());
-        }
-        if (tasksDto.getDescription() != null) {
             taskLocalObject.setDescription(tasksDto.getDescription());
-        }
-        if (tasksDto.getHeader() != null) {
             taskLocalObject.setHeader(tasksDto.getHeader());
-        }
-        if (tasksDto.getNotesDto() != null) {
             taskLocalObject.setNotes(notesMapper.convertDtoToNotes(tasksDto.getNotesDto()));
         }
         return taskLocalObject;
@@ -48,26 +45,14 @@ public class TaskMapper {
 
     public TasksDto convertTasksToDto(Tasks tasks) {
         TasksDto tasksDtoLocalObject = new TasksDto();
-        tasksDtoLocalObject.setId(tasks.getId());
-        if (tasks.getTaskExecutor() != null) {
+        if (tasks != null) {
+            tasksDtoLocalObject.setId(tasks.getId());
             tasksDtoLocalObject.setTaskExecutor(userMapper.convertUserToDto(tasks.getTaskExecutor()));
-        }
-        if (tasks.getTaskAuthor() != null) {
             tasksDtoLocalObject.setTaskAuthor(userMapper.convertUserToDto(tasks.getTaskAuthor()));
-        }
-        if (tasks.getTaskPriority() != null) {
             tasksDtoLocalObject.setTaskPriority(tasks.getTaskPriority());
-        }
-        if (tasks.getTaskStatus() != null) {
             tasksDtoLocalObject.setTaskStatus(tasks.getTaskStatus());
-        }
-        if (tasks.getDescription() != null) {
             tasksDtoLocalObject.setDescription(tasks.getDescription());
-        }
-        if (tasks.getHeader() != null) {
             tasksDtoLocalObject.setHeader(tasks.getHeader());
-        }
-        if (tasks.getNotes() != null) {
             tasksDtoLocalObject.setNotesDto(notesMapper.convertNotesToDto(tasks.getNotes()));
         }
         return tasksDtoLocalObject;
@@ -102,7 +87,7 @@ public class TaskMapper {
                 tasks.setTaskAuthor(newTasks.getTaskAuthor());
             }
         } else {
-            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumUser());
+            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription());
         }
         return tasks;
     }
@@ -118,7 +103,7 @@ public class TaskMapper {
                 tasks.setTaskExecutor(newTasks.getTaskExecutor());
             }
         } else {
-            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumUser());
+            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription());
         }
         return tasks;
     }

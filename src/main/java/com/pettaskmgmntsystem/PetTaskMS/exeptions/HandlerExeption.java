@@ -45,4 +45,10 @@ public class HandlerExeption {
         log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
         return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(NotEnoughRulesEntity.class)
+    protected ResponseEntity<Response> handleNotEnoughRulesEntity(NotEnoughRulesEntity e){
+        log.error("Возникла ошибка: " + e.getClass() + "\n" + e.getMessage() + "\n" + Arrays.toString(e.getStackTrace()).replaceAll(" ", "\n"));
+        return new ResponseEntity<>(new Response(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
 }

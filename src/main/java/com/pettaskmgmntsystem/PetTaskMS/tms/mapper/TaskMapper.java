@@ -3,16 +3,19 @@ package com.pettaskmgmntsystem.PetTaskMS.tms.mapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
-import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.GeneralActions;
+import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.TasksActions;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+
+import java.util.Optional;
 
 @Component
 @Slf4j
@@ -27,7 +30,7 @@ public class TaskMapper {
     @Autowired
     private UserActions userActions;
     @Autowired
-    private GeneralActions generalActions;
+    private TasksActions tasksActions;
 
     public Tasks convertDtoToTasks(TasksDto tasksDto, Integer... method) throws ExecutorNotFoundExeption {
         Tasks taskLocalObject = new Tasks();
@@ -158,7 +161,7 @@ public class TaskMapper {
     }
 
     private Tasks compareTasksAndDtoStatus(TasksDto tasksDto, Tasks tasks) {
-        if ((tasks.getTaskExecutor().getEmail().equals(userActions.getCurrentUser().get().getEmail()))
+        if ((tasks.getTaskExecutor().getEmail().equals(userActions.getEmailCurrentUser()))
                 && (tasksDto.getTaskStatus() != null && !tasksDto.getTaskStatus().equals(tasks.getTaskStatus()))) {
 
             tasks.setTaskStatus(tasksDto.getTaskStatus());
@@ -167,11 +170,13 @@ public class TaskMapper {
     }
 
     private Tasks compareTasksAndDtoNotes(TasksDto tasksDto, Tasks tasks) {
-        if ((tasksDto.getNotesDto() != null) && !tasksDto.getNotesDto().getComments()
-                .equals(tasks.getNotes().getComments())) {
-
-            tasks.getNotes().setComments(tasks.getNotes().getComments());
-            tasks.getNotes().setUsers(userActions.getCurrentUser().get());
+        Optional<CustomUsers> optionalCurrentUser = userActions.getCurrentUser();
+        if ((tasksDto.getNotesDto() != null && tasks.getNotes() != null) && optionalCurrentUser.isPresent()) { // Если комментарий уже есть и попытка его отредактировать
+            String emailCurrentUser = optionalCurrentUser.get().getEmail();
+            if(emailCurrentUser.equals(tasks.getNotes().getUsers().getEmail())){ // проверка, что автор комментария пытается его изменить
+                tasks.getNotes().setComments(tasksDto.getNotesDto().getComments());
+                tasks.getNotes().setUsers(userActions.getCurrentUser().get());
+            }
         }
         return tasks;
     }

@@ -2,6 +2,7 @@ package com.pettaskmgmntsystem.PetTaskMS.tms.controller;
 
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
+import com.pettaskmgmntsystem.PetTaskMS.exeptions.NotEnoughRulesEntity;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,7 @@ public class TaskController {
     }
 
     @PutMapping("/task/update-tasks")
-    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) throws ExecutorNotFoundExeption {
+    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) throws ExecutorNotFoundExeption, NotEnoughRulesEntity {
         TasksDto newTasksDto = taskService.changeTasks(tasksDto);
         if (newTasksDto != null){
         return ResponseEntity.ok(newTasksDto);

@@ -4,7 +4,7 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRe
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
-import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.GeneralActions;
+import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.TasksActions;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -21,7 +21,7 @@ public class UserActions {
     private AuthorizationRepository authorizationRepository;
 
     @Autowired
-    private GeneralActions generalActions;
+    private TasksActions tasksActions;
 
     public Tasks checkFindUser(CustomUsers customUsers, Tasks newTasks, Integer typeOperations) throws UsernameNotFoundException {
         Optional<CustomUsers> optionalCustomUsers = searchUserEmailOrId(customUsers);
@@ -40,6 +40,10 @@ public class UserActions {
     public Optional<CustomUsers> getCurrentUser() {
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         return authorizationRepository.findByEmail(loggedInUser.getName());
+    }
+
+    public String getEmailCurrentUser(){
+        return getCurrentUser().get().getEmail();
     }
 
     public Optional<CustomUsers> searchUserEmailOrId(CustomUsers customUsers) throws UsernameNotFoundException {

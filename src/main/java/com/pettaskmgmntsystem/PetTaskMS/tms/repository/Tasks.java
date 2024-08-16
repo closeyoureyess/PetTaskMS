@@ -21,10 +21,10 @@ public class Tasks {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "tasks_header")
+    @Column(name = "header_tasks")
     private String header; //
 
-    @Column(name = "tasks_status")
+    @Column(name = "status_tasks")
     private String taskStatus; //
 
     @Column(name = "tasks_description")

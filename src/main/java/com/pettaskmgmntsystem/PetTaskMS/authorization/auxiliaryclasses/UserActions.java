@@ -4,6 +4,7 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRe
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
+import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.GeneralActions;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,9 @@ public class UserActions {
 
     @Autowired
     private AuthorizationRepository authorizationRepository;
+
+    @Autowired
+    private GeneralActions generalActions;
 
     public Tasks checkFindUser(CustomUsers customUsers, Tasks newTasks, Integer typeOperations) throws UsernameNotFoundException {
         Optional<CustomUsers> optionalCustomUsers = searchUserEmailOrId(customUsers);
@@ -38,13 +42,16 @@ public class UserActions {
         return authorizationRepository.findByEmail(loggedInUser.getName());
     }
 
-    private Optional<CustomUsers> searchUserEmailOrId(CustomUsers customUsers) {
+    public Optional<CustomUsers> searchUserEmailOrId(CustomUsers customUsers) throws UsernameNotFoundException {
         Optional<CustomUsers> optionalCustomUsers = Optional.empty();
         if (customUsers != null) {
             if (customUsers.getEmail() != null) {
                 optionalCustomUsers = authorizationRepository.findByEmail(customUsers.getEmail());
             } else if (customUsers.getId() != null) {
                 optionalCustomUsers = authorizationRepository.findById(customUsers.getId());
+            }
+            if (optionalCustomUsers.isEmpty()){
+                throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription());
             }
         }
         return optionalCustomUsers;

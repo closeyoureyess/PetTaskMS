@@ -6,13 +6,16 @@ import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRe
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
+import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.GeneralActions;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class TaskMapper {
 
     @Autowired
@@ -20,17 +23,21 @@ public class TaskMapper {
     @Autowired
     private NotesMapper notesMapper;
     @Autowired
-    AuthorizationRepository authorizationRepository;
+    private AuthorizationRepository authorizationRepository;
     @Autowired
-    UserActions userActions;
+    private UserActions userActions;
+    @Autowired
+    private GeneralActions generalActions;
 
-    public Tasks convertDtoToTasks(TasksDto tasksDto) throws ExecutorNotFoundExeption {
+    public Tasks convertDtoToTasks(TasksDto tasksDto, Integer... method) throws ExecutorNotFoundExeption {
         Tasks taskLocalObject = new Tasks();
         if (tasksDto != null) {
             taskLocalObject.setId(tasksDto.getId());
-            if (tasksDto.getTaskExecutor() != null) {
+            if ((tasksDto.getTaskExecutor() == null && method != null)
+                    || tasksDto.getTaskExecutor() != null) {
+
                 taskLocalObject.setTaskExecutor(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()));
-            } else if (tasksDto.getTaskExecutor() == null) {
+            } else if (tasksDto.getTaskExecutor() == null && method == null) {
                 throw new ExecutorNotFoundExeption(DescriptionUserExeption.EXECUTOR_NOT_SPECIFIED.getEnumDescription());
             }
             taskLocalObject.setTaskAuthor(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()));
@@ -38,7 +45,9 @@ public class TaskMapper {
             taskLocalObject.setTaskStatus(tasksDto.getTaskStatus());
             taskLocalObject.setDescription(tasksDto.getDescription());
             taskLocalObject.setHeader(tasksDto.getHeader());
-            taskLocalObject.setNotes(notesMapper.convertDtoToNotes(tasksDto.getNotesDto()));
+            if (tasksDto.getNotesDto() != null) {
+                taskLocalObject.setNotes(notesMapper.convertDtoToNotes(tasksDto.getNotesDto()));
+            }
         }
         return taskLocalObject;
     }
@@ -76,34 +85,48 @@ public class TaskMapper {
         return tasks;
     }
 
-    private Tasks compareTaskAndDtoAuthor(TasksDto tasksDto, Tasks tasks) throws UsernameNotFoundException {
-        if (!tasksDto.getTaskAuthor().getEmail().equals(tasks.getTaskAuthor().getEmail())
+    private Tasks compareTaskAndDtoAuthor(TasksDto tasksDto, Tasks tasks) {
+        Tasks newTasks;
+        if ((tasksDto.getTaskAuthor() != null && tasks.getTaskAuthor() != null) // Есть автор
+                && (!tasksDto.getTaskAuthor().getEmail().equals(tasks.getTaskAuthor().getEmail()) // Емейл не совпадает
                 ||
-                !tasksDto.getTaskAuthor().getId().equals(tasks.getTaskAuthor().getId())) {
+                !tasksDto.getTaskAuthor().getId().equals(tasks.getTaskAuthor().getId()))) { // ID не совпадает
 
-            Tasks newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
+            newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
                     ConstantsClass.REGIME_OVERWRITING);
             if (newTasks != null) {
                 tasks.setTaskAuthor(newTasks.getTaskAuthor());
             }
-        } else {
-            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription());
+        } else if ((tasksDto.getTaskAuthor() != null && tasks.getTaskAuthor() == null)
+                && (tasksDto.getTaskAuthor().getId() != null || tasksDto.getTaskAuthor().getEmail() != null)) {
+
+            newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
+                    ConstantsClass.REGIME_OVERWRITING);
+            if (newTasks != null) {
+                tasks.setTaskAuthor(newTasks.getTaskAuthor());
+            }
         }
         return tasks;
     }
 
-    private Tasks compareTasksAndDtoExecutor(TasksDto tasksDto, Tasks tasks) throws UsernameNotFoundException {
-        if (!tasksDto.getTaskExecutor().getEmail().equals(tasks.getTaskExecutor().getEmail())
-                ||
-                !tasksDto.getTaskExecutor().getId().equals(tasks.getTaskExecutor().getId())) {
+    private Tasks compareTasksAndDtoExecutor(TasksDto tasksDto, Tasks tasks) {
+        if (
+                (
+                        ((tasksDto.getTaskExecutor() != null && tasks.getTaskExecutor() != null))
+                        &&
+                        (!tasksDto.getTaskExecutor().getEmail().equals(tasks.getTaskExecutor().getEmail())
+                                ||
+                                !tasksDto.getTaskExecutor().getId().equals(tasks.getTaskExecutor().getId()))
+                )
+
+                        || (tasksDto.getTaskExecutor() != null && tasks.getTaskExecutor() == null)
+        ) {
 
             Tasks newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()), tasks,
                     ConstantsClass.REGIME_RECORD);
             if (newTasks != null) {
                 tasks.setTaskExecutor(newTasks.getTaskExecutor());
             }
-        } else {
-            throw new UsernameNotFoundException(DescriptionUserExeption.USER_NOT_FOUND.getEnumDescription());
         }
         return tasks;
     }
@@ -118,7 +141,7 @@ public class TaskMapper {
     }
 
     private Tasks compareTasksAndDtoPriority(TasksDto tasksDto, Tasks tasks) {
-        if (tasksDto.getTaskPriority() != null && !tasksDto.getTaskPriority()
+        if (/*tasksDto.getTaskPriority() != null && */!tasksDto.getTaskPriority()
                 .equals(tasks.getTaskPriority())) {
 
             tasks.setTaskPriority(tasksDto.getTaskPriority());
@@ -127,7 +150,7 @@ public class TaskMapper {
     }
 
     private Tasks compareTasksAndDtoHeader(TasksDto tasksDto, Tasks tasks) {
-        if (tasksDto.getHeader() != null && !tasksDto.getHeader().equals(tasks.getHeader())) {
+        if (/*tasksDto.getHeader() != null && */!tasksDto.getHeader().equals(tasks.getHeader())) {
 
             tasks.setHeader(tasksDto.getHeader());
         }

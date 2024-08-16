@@ -1,6 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.services;
 
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
@@ -43,18 +44,32 @@ public class TaskService {
         return taskMapper.convertTasksToDto(newTasks);
     }
 
-    public TasksDto changeTasks(TasksDto tasksDto) {
-        Optional<Tasks> optionalTaskDatabase = tasksRepository.findById(tasksDto.getId());
-        if (optionalTaskDatabase.isPresent()) {
-            Tasks newTasks = taskMapper.compareTaskAndDto(tasksDto, optionalTaskDatabase.get());
-            return taskMapper.convertTasksToDto(
-                    tasksRepository.save(newTasks)
-            );
+    public TasksDto changeTasks(TasksDto tasksDto) throws ExecutorNotFoundExeption {
+        Optional<Tasks> optionalTaskDatabase = Optional.empty();
+        Tasks newTasks = taskMapper.convertDtoToTasks(tasksDto);
+        if (tasksDto.getId() != null) {
+            optionalTaskDatabase = tasksRepository.findById(newTasks.getId());
         }
-        return null;
+        if (optionalTaskDatabase.isPresent()) {
+            if (tasksDto.getTaskAuthor() == null){
+                tasksDto.setTaskAuthor(userMapper.convertUserToDto(optionalTaskDatabase.get().getTaskAuthor()));
+            }
+            newTasks = taskMapper.compareTaskAndDto(tasksDto, optionalTaskDatabase.get());
+            newTasks = tasksRepository.save(newTasks);
+        }
+        return taskMapper.convertTasksToDto(newTasks);
     }
 
-    private void hidePassword(Tasks newTasks) {
+    public boolean deleteTasks(CustomUsersDto customUsersDto){
+       boolean resultDeleteTasks = tasksRepository.existsById(customUsersDto.getId());
+       if (resultDeleteTasks){
+           tasksRepository.deleteById(customUsersDto.getId());
+           return true;
+       }
+       return false;
+    }
+
+    private void hidePassword(Tasks newTasks, TasksDto... tasksDto) {
         if (newTasks.getTaskAuthor() != null) {
             newTasks.getTaskAuthor().setPasswordKey(ConstantsClass.HIDE);
         }

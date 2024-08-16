@@ -1,5 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.controller;
 
+import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
+import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
@@ -35,13 +37,6 @@ public class TaskController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/task/test")
-    public String getTaskAuthor(/*@PathVariable("author") String author*/) {
-        /*log.info("Получение задачи по автору, метод GET " + author);
-        return ResponseEntity.ok(null);*/
-        return "TEST";
-    }
-
     @GetMapping("/task/gen-info/{executor}")
     public ResponseEntity<TasksDto> getTaskExecutor(@PathVariable("executor") String executor) {
         log.info("Получение задачи по исполнителю, метод GET " + executor);
@@ -49,13 +44,21 @@ public class TaskController {
     }
 
     @PutMapping("/task/update-tasks")
-    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) throws ExecutorNotFoundExeption {
+        TasksDto newTasksDto = taskService.changeTasks(tasksDto);
+        if (newTasksDto != null){
+        return ResponseEntity.ok(newTasksDto);
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/task/delete/{id}")
-    ResponseEntity<List<TasksDto>> deleteCase(@PathVariable("id") Integer id) {
-        log.info("Удаление задачи по id, метод DELETE" + id);
-        return ResponseEntity.ok(null);
+    public ResponseEntity<String> deleteCase(@PathVariable("id") CustomUsersDto customUsersDto) {
+        log.info("Удаление задачи по id, метод DELETE" + customUsersDto.getId());
+        boolean resultDeleteTasks = taskService.deleteTasks(customUsersDto);
+        if (resultDeleteTasks) {
+            return ResponseEntity.ok(ConstantsClass.IS_DELETE);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

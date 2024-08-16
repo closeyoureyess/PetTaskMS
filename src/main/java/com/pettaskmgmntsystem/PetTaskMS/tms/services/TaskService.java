@@ -60,10 +60,10 @@ public class TaskService {
         return taskMapper.convertTasksToDto(newTasks);
     }
 
-    public boolean deleteTasks(CustomUsersDto customUsersDto){
-       boolean resultDeleteTasks = tasksRepository.existsById(customUsersDto.getId());
+    public boolean deleteTasks(Integer idTasks){
+       boolean resultDeleteTasks = tasksRepository.existsById(idTasks);
        if (resultDeleteTasks){
-           tasksRepository.deleteById(customUsersDto.getId());
+           tasksRepository.deleteById(idTasks);
            return true;
        }
        return false;

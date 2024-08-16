@@ -1,6 +1,5 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.controller;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
@@ -10,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping
@@ -53,9 +50,9 @@ public class TaskController {
     }
 
     @DeleteMapping("/task/delete/{id}")
-    public ResponseEntity<String> deleteCase(@PathVariable("id") CustomUsersDto customUsersDto) {
-        log.info("Удаление задачи по id, метод DELETE" + customUsersDto.getId());
-        boolean resultDeleteTasks = taskService.deleteTasks(customUsersDto);
+    public ResponseEntity<String> deleteCase(@PathVariable("id") Integer idTasks) {
+        log.info("Удаление задачи по id, метод DELETE" + idTasks);
+        boolean resultDeleteTasks = taskService.deleteTasks(idTasks);
         if (resultDeleteTasks) {
             return ResponseEntity.ok(ConstantsClass.IS_DELETE);
         }

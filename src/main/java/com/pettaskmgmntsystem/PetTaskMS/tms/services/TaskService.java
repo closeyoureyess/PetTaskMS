@@ -1,6 +1,7 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.services;
 
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
+import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
@@ -52,22 +53,21 @@ public class TaskService {
 
     public TasksDto changeTasks(TasksDto tasksDto) throws ExecutorNotFoundExeption, NotEnoughRulesEntity {
         Optional<Tasks> optionalTaskDatabase = Optional.empty();
-        Tasks newTasks = taskMapper.convertDtoToTasks(tasksDto);
         if (tasksDto.getId() != null) {
-            optionalTaskDatabase = tasksRepository.findById(newTasks.getId());
+            optionalTaskDatabase = tasksRepository.findById(taskMapper.convertDtoToTasks(tasksDto).getId());
         }
         if (optionalTaskDatabase.isPresent()) {
-            newTasks = optionalTaskDatabase.get();
+            TasksDto newTasksDto = taskMapper.convertTasksToDto(optionalTaskDatabase.get());
 
-            boolean resultCheckPrivilege = checkPrivilegeTasks(newTasks, tasksDto);
+            boolean resultCheckPrivilege = checkPrivilegeTasks(newTasksDto, tasksDto);
             if (!resultCheckPrivilege){
                 return null;
             }
 
             if (tasksDto.getTaskAuthor() == null) {
-                tasksDto.setTaskAuthor(userMapper.convertUserToDto(newTasks.getTaskAuthor()));
+                tasksDto.setTaskAuthor(newTasksDto.getTaskAuthor());
             }
-            newTasks = taskMapper.compareTaskAndDto(tasksDto, newTasks);
+            Tasks newTasks = taskMapper.compareTaskAndDto(tasksDto, optionalTaskDatabase.get());
             newTasks = tasksRepository.save(newTasks);
             return taskMapper.convertTasksToDto(newTasks);
         }
@@ -87,14 +87,14 @@ public class TaskService {
         return false;
     }
 
-    private boolean checkPrivilegeTasks(Tasks tasksFromDB, TasksDto tasksDto) throws NotEnoughRulesEntity {
-        CustomUsers userAuthorTaskDB = tasksFromDB.getTaskAuthor();
-        CustomUsers userExecutorTaskDB = tasksFromDB.getTaskExecutor();
-        boolean availabilityRules = tasksActions.isPrivilegeTasks(userAuthorTaskDB);
+    private boolean checkPrivilegeTasks(TasksDto tasksDtoFromDB, TasksDto tasksDto) throws NotEnoughRulesEntity {
+        CustomUsersDto userDtoAuthorTaskDB = tasksDtoFromDB.getTaskAuthor();
+        CustomUsersDto userCurrentDtoExecutorTaskDB = tasksDto.getTaskExecutor();
+        boolean availabilityRules = tasksActions.isPrivilegeTasks(userDtoAuthorTaskDB);
         if (availabilityRules) {
             return true;
         } else {
-            if (tasksActions.isPrivilegeTasks(userExecutorTaskDB)) {
+            if (tasksActions.isPrivilegeTasks(userCurrentDtoExecutorTaskDB)) {
                 return isFieldsTasksDtoIsNullOrNot(tasksDto);
             } else {
                 return false;

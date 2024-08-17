@@ -38,6 +38,7 @@ public class UserActions {
     }
 
     public Optional<CustomUsers> getCurrentUser() {
+        System.out.println("ТЕКУЩИЙ ЮЗЕР " + SecurityContextHolder.getContext().getAuthentication().getName());
         Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         return authorizationRepository.findByEmail(loggedInUser.getName());
     }

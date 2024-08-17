@@ -9,6 +9,7 @@ import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.NotEnoughRulesEntity;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.TasksRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,11 +18,11 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
+@Slf4j
 public class TasksActions {
 
     @Autowired
-    AuthorizationRepository authorizationRepository;
-
+    private AuthorizationRepository authorizationRepository;
     @Autowired
     private TasksRepository tasksRepository;
     @Autowired
@@ -36,14 +37,15 @@ public class TasksActions {
         return false;
     }
 
-    public boolean isPrivilegeTasks(CustomUsersDto customUsersDto) throws NotEnoughRulesEntity {
+    public boolean isPrivilegeTasks(CustomUsersDto customUsersDto) {
         UserActions userActions = new UserActions();
-        String emailCurrentUser = userActions.getEmailCurrentUser();
+        Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        Optional<CustomUsers> customUsers = authorizationRepository.findByEmail(loggedInUser.getName());
+        String emailCurrentUser = customUsers.get().getEmail();
         if (customUsersDto.getEmail().equals(emailCurrentUser)) {
             return true;
-        } else {
-            throw new NotEnoughRulesEntity(DescriptionUserExeption.NOT_ENOUGH_RULES.getEnumDescription());
         }
+        return false;
     }
 
     public boolean checkExistTasks(Integer idTasks) {

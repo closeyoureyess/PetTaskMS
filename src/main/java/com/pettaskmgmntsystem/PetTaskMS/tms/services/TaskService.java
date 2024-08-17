@@ -28,7 +28,7 @@ import java.util.Optional;
 public class TaskService {
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
     @Autowired
     private TaskMapper taskMapper;
     @Autowired

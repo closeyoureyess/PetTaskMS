@@ -21,7 +21,7 @@ import java.util.Random;
 @Slf4j
 public class ShedulerEngineService {
 
-    /*@Scheduled(fixedDelay = 10000)*/
+   /*@Scheduled(fixedDelay = 10000)*/
     public void restCreateCase() {
         RestTemplate restTemplate = new RestTemplate();
         String createCaseController = "http://localhost:8081/api/v2/case/update-case";
@@ -51,7 +51,7 @@ public class ShedulerEngineService {
         Random random = new Random();
         int a = 0;
         StringBuilder stringBuilder = new StringBuilder();
-        while (a < 27) {
+        while (a < 28) {
             stringBuilder.append((char) random.nextInt(96, 123));
             a++;
         }

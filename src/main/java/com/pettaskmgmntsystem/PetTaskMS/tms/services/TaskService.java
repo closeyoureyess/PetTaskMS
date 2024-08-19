@@ -74,10 +74,9 @@ public class TaskService {
         return null;
     }
 
-    /*public TasksDto getTasks(String) {
-        tasksRepository.findById()
+    public TasksDto getTasksOfAuthor(String author) {
+
     }
-*/
     public boolean deleteTasks(Integer idTasks) {
         boolean resultDeleteTasks = tasksActions.checkExistTasks(idTasks);
         if (resultDeleteTasks) {

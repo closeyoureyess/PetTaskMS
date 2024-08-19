@@ -5,7 +5,6 @@ import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.NotEnoughRulesEntity;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping
@@ -34,9 +34,18 @@ public class TaskController {
     }
 
     @GetMapping("/task/gen-info/{author}")
-    public ResponseEntity<List<TasksDto>> getTaskAuthor(@PathVariable("author") String author) {
+    public ResponseEntity<List<TasksDto>> getTaskAuthor(
+            @PathVariable("author") String author,
+            @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+            @RequestParam(value = "limit", defaultValue = "10") @Min(1) Integer limit
+    ) {
         log.info("Получение задачи по автору, метод GET " + author);
-        return ResponseEntity.ok(null);
+        Optional<List<TasksDto>> optionalAuthorsTasksDtoList = taskService.getTasksOfAuthorOrExecutor(author, offset, limit,
+                ConstantsClass.REGIME_RECORD);
+        if (optionalAuthorsTasksDtoList.isPresent()) {
+            return ResponseEntity.ok(optionalAuthorsTasksDtoList.get());
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @GetMapping("/task/gen-info/{executorEmail}")
@@ -46,15 +55,19 @@ public class TaskController {
             @RequestParam(value = "limit", defaultValue = "10") @Min(1) Integer limit
     ) {
         log.info("Получение задачи по исполнителю, метод GET " + executorEmail);
-        List<TasksDto> tasksDtoList = taskService.getTasksOfAuthor(executorEmail, offset, limit);
-        return ResponseEntity.ok(null);
+        Optional<List<TasksDto>> optionalExecutorTasksDtoList = taskService.getTasksOfAuthorOrExecutor(executorEmail, offset, limit,
+                ConstantsClass.REGIME_OVERWRITING);
+        if (optionalExecutorTasksDtoList.isPresent()) {
+            return ResponseEntity.ok(optionalExecutorTasksDtoList.get());
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/task/update-tasks")
     public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) throws ExecutorNotFoundExeption, NotEnoughRulesEntity {
         TasksDto newTasksDto = taskService.changeTasks(tasksDto);
-        if (newTasksDto != null){
-        return ResponseEntity.ok(newTasksDto);
+        if (newTasksDto != null) {
+            return ResponseEntity.ok(newTasksDto);
         }
         return ResponseEntity.badRequest().build();
     }

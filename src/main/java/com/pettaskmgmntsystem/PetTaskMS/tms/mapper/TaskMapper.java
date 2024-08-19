@@ -74,11 +74,13 @@ public class TaskMapper {
 
     public List<TasksDto> transferListTasksToDto(List<Tasks> tasksList) {
         List<TasksDto> tasksDtoList = new LinkedList<>();
-        for (int i = 0; i < tasksList.size(); i++) {
-            tasksDtoList.add(new TasksDto(tasksList.get(i).getId(), userMapper.convertUserToDto(tasksList.get(i).getTaskAuthor()),
-                    userMapper.convertUserToDto(tasksList.get(i).getTaskExecutor()),
-                    notesMapper.convertNotesToDto(tasksList.get(i).getNotes()), tasksList.get(i).getTaskPriority(),
-                    tasksList.get(i).getTaskStatus(), tasksList.get(i).getHeader(), tasksList.get(i).getDescription()));
+        if (tasksList != null) {
+            for (int i = 0; i < tasksList.size(); i++) {
+                tasksDtoList.add(new TasksDto(tasksList.get(i).getId(), userMapper.convertUserToDto(tasksList.get(i).getTaskAuthor()),
+                        userMapper.convertUserToDto(tasksList.get(i).getTaskExecutor()),
+                        notesMapper.convertNotesToDto(tasksList.get(i).getNotes()), tasksList.get(i).getTaskPriority(),
+                        tasksList.get(i).getTaskStatus(), tasksList.get(i).getHeader(), tasksList.get(i).getDescription()));
+            }
         }
         return tasksDtoList;
     }

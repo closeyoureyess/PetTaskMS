@@ -25,6 +25,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +66,7 @@ public class TaskService {
             TasksDto newTasksDto = taskMapper.convertTasksToDto(optionalTaskDatabase.get());
 
             boolean resultCheckPrivilege = checkPrivilegeTasks(newTasksDto, tasksDto);
-            if (!resultCheckPrivilege){
+            if (!resultCheckPrivilege) {
                 return null;
             }
 
@@ -79,7 +80,7 @@ public class TaskService {
         return null;
     }
 
-    public List<TasksDto> getTasksOfAuthor(String author, Integer offset, Integer limit) {
+    /*public List<TasksDto> getAllTasksAuthorOrExecutorDataBase(String author, Integer offset, Integer limit) {
         ValidationClass validationClass = new ValidationClass();
 
         Optional<ValidationClass> resultValid = validationClass.validEmailOrId(author);
@@ -97,6 +98,45 @@ public class TaskService {
             }
         }
 
+    }*/
+
+    public Optional<List<TasksDto>> getTasksOfAuthorOrExecutor(String authorOrExecutor, Integer offset, Integer limit, Integer flag) {
+        if (flag.equals(ConstantsClass.REGIME_RECORD)) {
+            return Optional.of(getAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_RECORD));
+        } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
+            return Optional.of(getAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_OVERWRITING));
+        }
+        return Optional.empty();
+    }
+
+    private List<TasksDto> getAllTasksAuthorOrExecutorDataBase(String author, Integer offset, Integer limit, Integer flag) {
+        ValidationClass validationClass = new ValidationClass();
+        List<Tasks> listAllTasks = new LinkedList<>();
+
+        Optional<ValidationClass> resultValid = validationClass.validEmailOrId(author);
+        if (resultValid.isPresent()) {
+            Page<Tasks> pageAllUsersTasks = null;
+
+            Pageable pageble = PageRequest.of(offset, limit);
+            String userEmail = resultValid.get().getValidationString();
+            Integer userId = resultValid.get().getValidationInteger();
+
+            if (userEmail != null) {
+                authorizationRepository.findByEmail(userEmail);
+            }
+
+            if (userId != null) {
+                if (flag.equals(ConstantsClass.REGIME_RECORD)) {
+                    pageAllUsersTasks = tasksRepository.findAllByTasksAuthorId(userId, pageble);
+                } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
+                    pageAllUsersTasks = tasksRepository.findAllByTasksExecutorId(userId, pageble);
+                }
+                if (pageAllUsersTasks != null) {
+                    listAllTasks = pageAllUsersTasks.stream().toList();
+                }
+            }
+        }
+        return taskMapper.transferListTasksToDto(listAllTasks);
     }
 
     public boolean deleteTasks(Integer idTasks) {

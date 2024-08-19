@@ -9,6 +9,8 @@ public class ConstantsClass {
     public static final String LINE_FEED = "\n";
     public static final String HIDE = "####information is hidden";
     public static final String IS_DELETE = "Сущность была удалена";
+    public static final String REGEX_ONLY_NUMBERS = "^-?\\d+$";
+    public static final String REGEX_EMAIL = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
     public static final Integer REGIME_RECORD = 1;
     public static final Integer REGIME_OVERWRITING = 0;
 }

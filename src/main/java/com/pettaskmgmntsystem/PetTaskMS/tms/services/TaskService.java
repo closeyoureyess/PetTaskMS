@@ -10,6 +10,7 @@ import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.NotEnoughRulesEntity;
 import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.TasksActions;
+import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.ValidationClass;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.NotesDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Notes;
@@ -18,9 +19,13 @@ import com.pettaskmgmntsystem.PetTaskMS.tms.mapper.TaskMapper;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.TasksRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -74,11 +79,28 @@ public class TaskService {
         return null;
     }
 
-    public TasksDto getTasksOfAuthor(String author) {
+    public List<TasksDto> getTasksOfAuthor(String author, Integer offset, Integer limit) {
+        ValidationClass validationClass = new ValidationClass();
+
+        Optional<ValidationClass> resultValid = validationClass.validEmailOrId(author);
+        if (resultValid.isPresent()){
+            String userEmail = resultValid.get().getValidationString();
+            Integer userId = resultValid.get().getValidationInteger();
+            if (userEmail != null){
+                authorizationRepository.findByEmail(userEmail);
+            }
+            if (userId != null){
+                Pageable pageble = PageRequest.of(offset, limit);
+                Page<Tasks> pageAllUsersTasks = tasksRepository.findAllByTasksAuthorId(userId, pageble);
+                List<Tasks> listAllUsersTasks = pageAllUsersTasks.stream().toList();
+                return taskMapper.transferListTasksToDto(listAllUsersTasks);
+            }
+        }
 
     }
+
     public boolean deleteTasks(Integer idTasks) {
-        boolean resultDeleteTasks = tasksActions.checkExistTasks(idTasks);
+        boolean resultDeleteTasks = tasksRepository.existsById(idTasks);
         if (resultDeleteTasks) {
             tasksRepository.deleteById(idTasks);
             return true;

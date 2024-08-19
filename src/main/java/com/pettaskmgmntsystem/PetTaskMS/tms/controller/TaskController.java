@@ -5,11 +5,15 @@ import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.NotEnoughRulesEntity;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping
@@ -30,14 +34,19 @@ public class TaskController {
     }
 
     @GetMapping("/task/gen-info/{author}")
-    public ResponseEntity<TasksDto> getTaskAuthor(@PathVariable("author") String author) {
+    public ResponseEntity<List<TasksDto>> getTaskAuthor(@PathVariable("author") String author) {
         log.info("Получение задачи по автору, метод GET " + author);
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping("/task/gen-info/{executor}")
-    public ResponseEntity<TasksDto> getTaskExecutor(@PathVariable("executor") String executor) {
-        log.info("Получение задачи по исполнителю, метод GET " + executor);
+    @GetMapping("/task/gen-info/{executorEmail}")
+    public ResponseEntity<List<TasksDto>> getTaskExecutor(
+            @PathVariable("executorEmail") String executorEmail,
+            @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+            @RequestParam(value = "limit", defaultValue = "10") @Min(1) Integer limit
+    ) {
+        log.info("Получение задачи по исполнителю, метод GET " + executorEmail);
+        List<TasksDto> tasksDtoList = taskService.getTasksOfAuthor(executorEmail, offset, limit);
         return ResponseEntity.ok(null);
     }
 

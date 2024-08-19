@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -70,6 +72,17 @@ public class TaskMapper {
         return tasksDtoLocalObject;
     }
 
+    public List<TasksDto> transferListTasksToDto(List<Tasks> tasksList) {
+        List<TasksDto> tasksDtoList = new LinkedList<>();
+        for (int i = 0; i < tasksList.size(); i++) {
+            tasksDtoList.add(new TasksDto(tasksList.get(i).getId(), userMapper.convertUserToDto(tasksList.get(i).getTaskAuthor()),
+                    userMapper.convertUserToDto(tasksList.get(i).getTaskExecutor()),
+                    notesMapper.convertNotesToDto(tasksList.get(i).getNotes()), tasksList.get(i).getTaskPriority(),
+                    tasksList.get(i).getTaskStatus(), tasksList.get(i).getHeader(), tasksList.get(i).getDescription()));
+        }
+        return tasksDtoList;
+    }
+
     public Tasks compareTaskAndDto(TasksDto tasksDto, Tasks tasks) throws UsernameNotFoundException {
         //author
         tasks = compareTaskAndDtoAuthor(tasksDto, tasks);
@@ -116,10 +129,10 @@ public class TaskMapper {
         if (
                 (
                         ((tasksDto.getTaskExecutor() != null && tasks.getTaskExecutor() != null))
-                        &&
-                        (!tasksDto.getTaskExecutor().getEmail().equals(tasks.getTaskExecutor().getEmail())
-                                ||
-                                !tasksDto.getTaskExecutor().getId().equals(tasks.getTaskExecutor().getId()))
+                                &&
+                                (!tasksDto.getTaskExecutor().getEmail().equals(tasks.getTaskExecutor().getEmail())
+                                        ||
+                                        !tasksDto.getTaskExecutor().getId().equals(tasks.getTaskExecutor().getId()))
                 )
 
                         || (tasksDto.getTaskExecutor() != null && tasks.getTaskExecutor() == null)
@@ -173,7 +186,7 @@ public class TaskMapper {
         Optional<CustomUsers> optionalCurrentUser = userActions.getCurrentUser();
         if ((tasksDto.getNotesDto() != null && tasks.getNotes() != null) && optionalCurrentUser.isPresent()) { // Если комментарий уже есть и попытка его отредактировать
             String emailCurrentUser = optionalCurrentUser.get().getEmail();
-            if(emailCurrentUser.equals(tasks.getNotes().getUsers().getEmail())){ // проверка, что автор комментария пытается его изменить
+            if (emailCurrentUser.equals(tasks.getNotes().getUsers().getEmail())) { // проверка, что автор комментария пытается его изменить
                 tasks.getNotes().setComments(tasksDto.getNotesDto().getComments());
                 tasks.getNotes().setUsers(userActions.getCurrentUser().get());
             }

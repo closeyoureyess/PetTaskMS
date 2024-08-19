@@ -47,9 +47,4 @@ public class TasksActions {
         }
         return false;
     }
-
-    public boolean checkExistTasks(Integer idTasks) {
-        return tasksRepository.existsById(idTasks);
-    }
-
 }

@@ -42,7 +42,7 @@ public class Tasks {
     private CustomUsers taskAuthor; //
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tasks_notes_id")
+    @JoinColumn(name = "tasksnotes_id")
     private Notes notes;
 
     @Override

@@ -31,18 +31,18 @@ public class Tasks {
     private String description;  //
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL
-    @JoinColumn(name = "tasks_executor_id")
+    @JoinColumn(name = "tasksexecutorid")
     private CustomUsers taskExecutor; //
 
     @Column(name = "tasks_priority")
     private String taskPriority;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL,
-    @JoinColumn(name = "tasks_author_id")
+    @JoinColumn(name = "tasksauthorid")
     private CustomUsers taskAuthor; //
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tasksnotes_id")
+    @JoinColumn(name = "tasksnotesid")
     private Notes notes;
 
     @Override

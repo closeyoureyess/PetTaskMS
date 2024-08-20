@@ -129,12 +129,11 @@ public class TaskService {
         return taskMapper.transferListTasksToDto(listAllTasks);
     }
 
-    private Optional<Page<Tasks>> methodFindAllTasksAuthorOrExecutor(Pageable pageble, Integer userId,
-                                                                     Integer flag) {
+    private Optional<Page<Tasks>> methodFindAllTasksAuthorOrExecutor(Pageable pageble, Integer userId, Integer flag) {
         if (flag.equals(ConstantsClass.REGIME_RECORD)) {
-            return Optional.of(tasksRepository.findAllByTasksAuthorId(userId, pageble));
+            return Optional.of(tasksRepository.findAllByTaskAuthorId(userId, pageble));
         } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
-            return Optional.of(tasksRepository.findAllByTasksExecutorId(userId, pageble));
+            return Optional.of(tasksRepository.findAllByTaskExecutorId(userId, pageble));
         }
         return Optional.empty();
     }

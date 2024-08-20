@@ -80,26 +80,6 @@ public class TaskService {
         return null;
     }
 
-    /*public List<TasksDto> receiveAllTasksAuthorOrExecutorDataBase(String author, Integer offset, Integer limit) {
-        ValidationClass validationClass = new ValidationClass();
-
-        Optional<ValidationClass> resultValid = validationClass.validEmailOrId(author);
-        if (resultValid.isPresent()){
-            String userEmail = resultValid.get().getValidationString();
-            Integer userId = resultValid.get().getValidationInteger();
-            if (userEmail != null){
-                authorizationRepository.findByEmail(userEmail);
-            }
-            if (userId != null){
-                Pageable pageble = PageRequest.of(offset, limit);
-                Page<Tasks> pageAllUsersTasks = tasksRepository.findAllByTasksAuthorId(userId, pageble);
-                List<Tasks> listAllUsersTasks = pageAllUsersTasks.stream().toList();
-                return taskMapper.transferListTasksToDto(listAllUsersTasks);
-            }
-        }
-
-    }*/
-
     public Optional<List<TasksDto>> getTasksOfAuthorOrExecutor(String authorOrExecutor, Integer offset, Integer limit, Integer flag) {
         if (flag.equals(ConstantsClass.REGIME_RECORD)) {
             return Optional.of(receiveAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_RECORD));

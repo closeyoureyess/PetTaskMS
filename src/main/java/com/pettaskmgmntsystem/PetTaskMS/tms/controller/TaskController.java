@@ -33,7 +33,7 @@ public class TaskController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/task/gen-info/{author}")
+    @GetMapping("/task/gen-info/author/{author}")
     public ResponseEntity<List<TasksDto>> getTaskAuthor(
             @PathVariable("author") String author,
             @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
@@ -48,7 +48,7 @@ public class TaskController {
         return ResponseEntity.badRequest().build();
     }
 
-    @GetMapping("/task/gen-info/{executorEmail}")
+    @GetMapping("/task/gen-info/executor/{executorEmail}")
     public ResponseEntity<List<TasksDto>> getTaskExecutor(
             @PathVariable("executorEmail") String executorEmail,
             @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,

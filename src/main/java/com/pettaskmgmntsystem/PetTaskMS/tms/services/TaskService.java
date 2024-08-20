@@ -80,7 +80,7 @@ public class TaskService {
         return null;
     }
 
-    /*public List<TasksDto> getAllTasksAuthorOrExecutorDataBase(String author, Integer offset, Integer limit) {
+    /*public List<TasksDto> receiveAllTasksAuthorOrExecutorDataBase(String author, Integer offset, Integer limit) {
         ValidationClass validationClass = new ValidationClass();
 
         Optional<ValidationClass> resultValid = validationClass.validEmailOrId(author);
@@ -102,42 +102,13 @@ public class TaskService {
 
     public Optional<List<TasksDto>> getTasksOfAuthorOrExecutor(String authorOrExecutor, Integer offset, Integer limit, Integer flag) {
         if (flag.equals(ConstantsClass.REGIME_RECORD)) {
-            return Optional.of(getAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_RECORD));
+            return Optional.of(receiveAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_RECORD));
         } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
-            return Optional.of(getAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_OVERWRITING));
+            return Optional.of(receiveAllTasksAuthorOrExecutorDataBase(authorOrExecutor, offset, limit, ConstantsClass.REGIME_OVERWRITING));
         }
         return Optional.empty();
     }
 
-    private List<TasksDto> getAllTasksAuthorOrExecutorDataBase(String author, Integer offset, Integer limit, Integer flag) {
-        ValidationClass validationClass = new ValidationClass();
-        List<Tasks> listAllTasks = new LinkedList<>();
-
-        Optional<ValidationClass> resultValid = validationClass.validEmailOrId(author);
-        if (resultValid.isPresent()) {
-            Page<Tasks> pageAllUsersTasks = null;
-
-            Pageable pageble = PageRequest.of(offset, limit);
-            String userEmail = resultValid.get().getValidationString();
-            Integer userId = resultValid.get().getValidationInteger();
-
-            if (userEmail != null) {
-                authorizationRepository.findByEmail(userEmail);
-            }
-
-            if (userId != null) {
-                if (flag.equals(ConstantsClass.REGIME_RECORD)) {
-                    pageAllUsersTasks = tasksRepository.findAllByTasksAuthorId(userId, pageble);
-                } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
-                    pageAllUsersTasks = tasksRepository.findAllByTasksExecutorId(userId, pageble);
-                }
-                if (pageAllUsersTasks != null) {
-                    listAllTasks = pageAllUsersTasks.stream().toList();
-                }
-            }
-        }
-        return taskMapper.transferListTasksToDto(listAllTasks);
-    }
 
     public boolean deleteTasks(Integer idTasks) {
         boolean resultDeleteTasks = tasksRepository.existsById(idTasks);
@@ -146,6 +117,39 @@ public class TaskService {
             return true;
         }
         return false;
+    }
+
+    private List<TasksDto> receiveAllTasksAuthorOrExecutorDataBase(String authorOrExecutor, Integer offset, Integer limit, Integer flag) {
+        ValidationClass validationClass = new ValidationClass();
+        List<Tasks> listAllTasks = new LinkedList<>();
+
+        Optional<ValidationClass> resultValid = validationClass.validEmailOrId(authorOrExecutor);
+        if (resultValid.isPresent()) {
+
+            Pageable pageble = PageRequest.of(offset, limit);
+            String userEmail = resultValid.get().getValidationString();
+            Integer userId = resultValid.get().getValidationInteger();
+
+            if (userEmail != null) {
+                Optional<CustomUsers> optionalCustomUsers = authorizationRepository.findByEmail(userEmail);
+                if (optionalCustomUsers.isPresent()) {
+                    listAllTasks = methodFindAllTasksAuthorOrExecutor(pageble, optionalCustomUsers.get().getId(), flag).stream().toList();
+                }
+            }
+            if (userId != null) {
+                listAllTasks = methodFindAllTasksAuthorOrExecutor(pageble, userId, flag).stream().toList();
+            }
+        }
+        return taskMapper.transferListTasksToDto(listAllTasks);
+    }
+
+    private Page<Tasks> methodFindAllTasksAuthorOrExecutor(Pageable pageble, Integer userId,
+                                                           Integer flag) {
+        if (flag.equals(ConstantsClass.REGIME_RECORD)) {
+            return tasksRepository.findAllByTasksAuthorId(userId, pageble);
+        } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
+            return tasksRepository.findAllByTasksExecutorId(userId, pageble);
+        }
     }
 
     private boolean checkPrivilegeTasks(TasksDto tasksDtoFromDB, TasksDto tasksDto) throws NotEnoughRulesEntity {

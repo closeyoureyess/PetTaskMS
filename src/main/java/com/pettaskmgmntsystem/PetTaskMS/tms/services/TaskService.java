@@ -113,23 +113,30 @@ public class TaskService {
             if (userEmail != null) {
                 Optional<CustomUsers> optionalCustomUsers = authorizationRepository.findByEmail(userEmail);
                 if (optionalCustomUsers.isPresent()) {
-                    listAllTasks = methodFindAllTasksAuthorOrExecutor(pageble, optionalCustomUsers.get().getId(), flag).stream().toList();
+                    Optional<Page<Tasks>> pageWithTasks = methodFindAllTasksAuthorOrExecutor(pageble, optionalCustomUsers.get().getId(), flag);
+                    if (pageWithTasks.isPresent()) {
+                        listAllTasks = pageWithTasks.get().stream().toList();
+                    }
+                }
+            } else if (userId != null) {
+                Optional<Page<Tasks>> pageWithTasks = methodFindAllTasksAuthorOrExecutor(pageble, userId, flag);
+                if (pageWithTasks.isPresent()) {
+                    listAllTasks = pageWithTasks.get().stream().toList();
                 }
             }
-            if (userId != null) {
-                listAllTasks = methodFindAllTasksAuthorOrExecutor(pageble, userId, flag).stream().toList();
-            }
+
         }
         return taskMapper.transferListTasksToDto(listAllTasks);
     }
 
-    private Page<Tasks> methodFindAllTasksAuthorOrExecutor(Pageable pageble, Integer userId,
-                                                           Integer flag) {
+    private Optional<Page<Tasks>> methodFindAllTasksAuthorOrExecutor(Pageable pageble, Integer userId,
+                                                                     Integer flag) {
         if (flag.equals(ConstantsClass.REGIME_RECORD)) {
-            return tasksRepository.findAllByTasksAuthorId(userId, pageble);
+            return Optional.of(tasksRepository.findAllByTasksAuthorId(userId, pageble));
         } else if (flag.equals(ConstantsClass.REGIME_OVERWRITING)) {
-            return tasksRepository.findAllByTasksExecutorId(userId, pageble);
+            return Optional.of(tasksRepository.findAllByTasksExecutorId(userId, pageble));
         }
+        return Optional.empty();
     }
 
     private boolean checkPrivilegeTasks(TasksDto tasksDtoFromDB, TasksDto tasksDto) throws NotEnoughRulesEntity {

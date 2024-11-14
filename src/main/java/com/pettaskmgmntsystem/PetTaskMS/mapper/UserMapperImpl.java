@@ -1,14 +1,13 @@
-package com.pettaskmgmntsystem.PetTaskMS.authorization.mapper;
+package com.pettaskmgmntsystem.PetTaskMS.mapper;
 
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
-public class UserMapper {
+public class UserMapperImpl implements UserMapper{
 
+    @Override
     public CustomUsers convertDtoToUser(CustomUsersDto userDto) {
         CustomUsers usersLocalObject = new CustomUsers(); // проверка на null
         if (userDto != null) {
@@ -20,6 +19,7 @@ public class UserMapper {
         return usersLocalObject;
     }
 
+    @Override
     public CustomUsersDto convertUserToDto(CustomUsers users) {
         CustomUsersDto userDtoLocalObject = new CustomUsersDto();
         if (users != null) {
@@ -30,5 +30,4 @@ public class UserMapper {
         }
         return userDtoLocalObject;
     }
-
 }

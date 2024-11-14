@@ -1,4 +1,4 @@
-package com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses;
+package com.pettaskmgmntsystem.PetTaskMS.auxiliaryclasses;
 
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import lombok.AllArgsConstructor;
@@ -14,13 +14,14 @@ import java.util.regex.Pattern;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ValidationClass {
+public class ValidationClassImpl implements ValidationClass{
 
     private String validationString;
 
     private Integer validationInteger;
 
-    public Optional<ValidationClass> validEmailOrId(String line){
+    @Override
+    public Optional<ValidationClassImpl> validEmailOrId(String line){
         boolean resultMatch;
 
         Pattern pattern = Pattern.compile(ConstantsClass.REGEX_ONLY_NUMBERS);
@@ -28,7 +29,7 @@ public class ValidationClass {
         resultMatch = matcher.find();
 
         if (resultMatch){
-            return Optional.of(new ValidationClass(Integer.valueOf(line)));
+            return Optional.of(new ValidationClassImpl(Integer.valueOf(line)));
         }
 
         pattern = Pattern.compile(ConstantsClass.REGEX_EMAIL);
@@ -36,17 +37,17 @@ public class ValidationClass {
         resultMatch = matcher.find();
 
         if (resultMatch){
-            return Optional.of(new ValidationClass(line));
+            return Optional.of(new ValidationClassImpl(line));
         }
 
         return Optional.empty();
     }
 
-    public ValidationClass(Integer validationId) {
+    public ValidationClassImpl(Integer validationId) {
         this.validationInteger = validationId;
     }
 
-    public ValidationClass(String validationEmail) {
+    public ValidationClassImpl(String validationEmail) {
         this.validationString = validationEmail;
     }
 }

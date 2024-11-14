@@ -34,6 +34,7 @@ public class EntranceController {
 
     @PostMapping("/entrance/registration")
     public ResponseEntity<CustomUsersDto> createUsers(@RequestBody CustomUsersDto customUsersDto) {
+        log.info("Метод регистрации, POST" + customUsersDto.getEmail());
         CustomUsersDto customUsersDtoLocal = userService.createUser(customUsersDto);
         if (customUsersDtoLocal != null) {
             return ResponseEntity.ok(customUsersDtoLocal);

@@ -1,9 +1,11 @@
 package com.pettaskmgmntsystem.PetTaskMS.authorization.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 
@@ -12,6 +14,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Validated
 public class CustomUsersDto implements Serializable {
 
     private Integer id;
@@ -20,6 +23,7 @@ public class CustomUsersDto implements Serializable {
 
     private String email;
 
+    @NotBlank
     private String role;
     @Override
     public int hashCode() {

@@ -31,18 +31,18 @@ public class Tasks {
     private String description;  //
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL
-    @JoinColumn(name = "tasksexecutorid")
+    @JoinColumn(name = "tasks_executor_id")
     private CustomUsers taskExecutor; //
 
     @Column(name = "tasks_priority")
     private String taskPriority;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL) // cascade = CascadeType.ALL,
-    @JoinColumn(name = "tasksauthorid")
+    @JoinColumn(name = "tasks_author_id")
     private CustomUsers taskAuthor; //
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "tasksnotesid")
+    @JoinColumn(name = "tasks_notes_id")
     private Notes notes;
 
     @Override
@@ -50,7 +50,7 @@ public class Tasks {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tasks tasks = (Tasks) o;
-        return id == tasks.id && Objects.equals(header, tasks.header) && Objects.equals(taskStatus, tasks.taskStatus) && Objects.equals(description, tasks.description) && Objects.equals(taskExecutor, tasks.taskExecutor) && Objects.equals(taskPriority, tasks.taskPriority) && Objects.equals(taskAuthor, tasks.taskAuthor) && Objects.equals(notes, tasks.notes);
+        return Objects.equals(id, tasks.id) && Objects.equals(header, tasks.header) && Objects.equals(taskStatus, tasks.taskStatus) && Objects.equals(description, tasks.description) && Objects.equals(taskExecutor, tasks.taskExecutor) && Objects.equals(taskPriority, tasks.taskPriority) && Objects.equals(taskAuthor, tasks.taskAuthor) && Objects.equals(notes, tasks.notes);
     }
 
     @Override

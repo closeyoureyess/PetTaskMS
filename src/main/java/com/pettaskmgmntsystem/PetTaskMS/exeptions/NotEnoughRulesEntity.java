@@ -1,6 +1,6 @@
 package com.pettaskmgmntsystem.PetTaskMS.exeptions;
 
-public class NotEnoughRulesEntity extends Exception {
+public class NotEnoughRulesEntity extends MainException {
 
     public NotEnoughRulesEntity(String message){
         super(message);

@@ -1,15 +1,13 @@
 package com.pettaskmgmntsystem.PetTaskMS.tms.controller;
 
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
-import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
-import com.pettaskmgmntsystem.PetTaskMS.exeptions.NotEnoughRulesEntity;
+import com.pettaskmgmntsystem.PetTaskMS.exeptions.MainException;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.services.TaskService;
 import jakarta.validation.constraints.Min;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +22,7 @@ public class TaskController {
     private TaskService taskService;
 
     @PostMapping("/task/create")
-    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto) throws UsernameNotFoundException, ExecutorNotFoundExeption {
+    public ResponseEntity<TasksDto> createTask(@RequestBody TasksDto tasksDto) throws MainException {
         log.info("Создание задачи, POST " + tasksDto.getHeader());
         TasksDto localTasksDto = taskService.createTasks(tasksDto);
         if (localTasksDto != null) {
@@ -64,7 +62,7 @@ public class TaskController {
     }
 
     @PutMapping("/task/update-tasks")
-    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) throws ExecutorNotFoundExeption, NotEnoughRulesEntity {
+    public ResponseEntity<TasksDto> editTasks(@RequestBody TasksDto tasksDto) throws MainException {
         TasksDto newTasksDto = taskService.changeTasks(tasksDto);
         if (newTasksDto != null) {
             return ResponseEntity.ok(newTasksDto);

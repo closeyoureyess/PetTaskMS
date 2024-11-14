@@ -1,13 +1,11 @@
-package com.pettaskmgmntsystem.PetTaskMS.tms.mapper;
+package com.pettaskmgmntsystem.PetTaskMS.mapper;
 
-import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.UserActions;
-import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.ExecutorNotFoundExeption;
-import com.pettaskmgmntsystem.PetTaskMS.tms.auxiliaryclasses.TasksActions;
+import com.pettaskmgmntsystem.PetTaskMS.fabrics.ActionsFabric;
 import com.pettaskmgmntsystem.PetTaskMS.tms.dto.TasksDto;
 import com.pettaskmgmntsystem.PetTaskMS.tms.repository.Tasks;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +19,7 @@ import java.util.Optional;
 
 @Component
 @Slf4j
-public class TaskMapper {
+public class TaskMapperImpl implements TaskMapper{
 
     @Autowired
     private UserMapper userMapper;
@@ -30,9 +28,7 @@ public class TaskMapper {
     @Autowired
     private AuthorizationRepository authorizationRepository;
     @Autowired
-    private UserActions userActions;
-    @Autowired
-    private TasksActions tasksActions;
+    private ActionsFabric actionsFabric;
 
     public Tasks convertDtoToTasks(TasksDto tasksDto, Integer... method) throws ExecutorNotFoundExeption {
         Tasks taskLocalObject = new Tasks();
@@ -110,7 +106,7 @@ public class TaskMapper {
                 ||
                 !tasksDto.getTaskAuthor().getId().equals(tasks.getTaskAuthor().getId()))) { // ID не совпадает
 
-            newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
+            newTasks = actionsFabric.createUserActions().checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
                     ConstantsClass.REGIME_OVERWRITING);
             if (newTasks != null) {
                 tasks.setTaskAuthor(newTasks.getTaskAuthor());
@@ -118,8 +114,9 @@ public class TaskMapper {
         } else if ((tasksDto.getTaskAuthor() != null && tasks.getTaskAuthor() == null)
                 && (tasksDto.getTaskAuthor().getId() != null || tasksDto.getTaskAuthor().getEmail() != null)) {
 
-            newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks,
-                    ConstantsClass.REGIME_OVERWRITING);
+            newTasks = actionsFabric
+                    .createUserActions()
+                    .checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskAuthor()), tasks, ConstantsClass.REGIME_OVERWRITING);
             if (newTasks != null) {
                 tasks.setTaskAuthor(newTasks.getTaskAuthor());
             }
@@ -140,8 +137,9 @@ public class TaskMapper {
                         || (tasksDto.getTaskExecutor() != null && tasks.getTaskExecutor() == null)
         ) {
 
-            Tasks newTasks = userActions.checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()), tasks,
-                    ConstantsClass.REGIME_RECORD);
+            Tasks newTasks = actionsFabric
+                    .createUserActions()
+                    .checkFindUser(userMapper.convertDtoToUser(tasksDto.getTaskExecutor()), tasks, ConstantsClass.REGIME_RECORD);
             if (newTasks != null) {
                 tasks.setTaskExecutor(newTasks.getTaskExecutor());
             }
@@ -176,7 +174,7 @@ public class TaskMapper {
     }
 
     private Tasks compareTasksAndDtoStatus(TasksDto tasksDto, Tasks tasks) {
-        if ((tasks.getTaskExecutor().getEmail().equals(userActions.getEmailCurrentUser()))
+        if ((tasks.getTaskExecutor().getEmail().equals(actionsFabric.createUserActions().getEmailCurrentUser()))
                 && (tasksDto.getTaskStatus() != null && !tasksDto.getTaskStatus().equals(tasks.getTaskStatus()))) {
 
             tasks.setTaskStatus(tasksDto.getTaskStatus());
@@ -185,12 +183,12 @@ public class TaskMapper {
     }
 
     private Tasks compareTasksAndDtoNotes(TasksDto tasksDto, Tasks tasks) {
-        Optional<CustomUsers> optionalCurrentUser = userActions.getCurrentUser();
+        Optional<CustomUsers> optionalCurrentUser = actionsFabric.createUserActions().getCurrentUser();
         if ((tasksDto.getNotesDto() != null && tasks.getNotes() != null) && optionalCurrentUser.isPresent()) { // Если комментарий уже есть и попытка его отредактировать
             String emailCurrentUser = optionalCurrentUser.get().getEmail();
             if (emailCurrentUser.equals(tasks.getNotes().getUsers().getEmail())) { // проверка, что автор комментария пытается его изменить
                 tasks.getNotes().setComments(tasksDto.getNotesDto().getComments());
-                tasks.getNotes().setUsers(userActions.getCurrentUser().get());
+                tasks.getNotes().setUsers(actionsFabric.createUserActions().getCurrentUser().get());
             }
         }
         return tasks;

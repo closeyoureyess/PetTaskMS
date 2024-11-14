@@ -4,7 +4,8 @@ package com.pettaskmgmntsystem.PetTaskMS.authorization.service;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.CustomUsers;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.auxiliaryclasses.LoginForm;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.dto.CustomUsersDto;
-import com.pettaskmgmntsystem.PetTaskMS.authorization.mapper.UserMapper;
+import com.pettaskmgmntsystem.PetTaskMS.constants.ConstantsClass;
+import com.pettaskmgmntsystem.PetTaskMS.mapper.UserMapperImpl;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.repository.AuthorizationRepository;
 import com.pettaskmgmntsystem.PetTaskMS.authorization.service.webtoken.JwtService;
 import com.pettaskmgmntsystem.PetTaskMS.exeptions.DescriptionUserExeption;
@@ -23,7 +24,7 @@ public class UserService {
     @Autowired
     private AuthorizationRepository authorizationRepository;
     @Autowired
-    private UserMapper userMapper;
+    private UserMapperImpl userMapperImpl;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -33,9 +34,12 @@ public class UserService {
 
     public CustomUsersDto createUser (CustomUsersDto customUsersDto){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        CustomUsers customUsers = userMapper.convertDtoToUser(customUsersDto);
+        if(!ConstantsClass.ADMINROLE.equals(customUsersDto.getRole()) && !ConstantsClass.USERROLE.equals(customUsersDto.getRole())){
+            customUsersDto.setRole(ConstantsClass.USERROLE);
+        }
+        CustomUsers customUsers = userMapperImpl.convertDtoToUser(customUsersDto);
         customUsers.setPasswordKey(passwordEncoder.encode(customUsers.getPasswordKey()));
-        return userMapper.convertUserToDto(
+        return userMapperImpl.convertUserToDto(
                 authorizationRepository.save(customUsers)
         );
     }
